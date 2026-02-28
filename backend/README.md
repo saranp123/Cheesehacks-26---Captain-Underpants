@@ -13,7 +13,7 @@ mvn spring-boot:run
 
 Server runs at **http://localhost:8080**.
 
-**If "Run" in the IDE fails with "SpringApplication cannot be resolved"**: the IDE is not using Maven’s classpath. Either run with the command above, or use **Terminal → Run Task → Run KINDR Backend**. To fix Run/Debug in the IDE, open the `backend` folder (where `pom.xml` is), then **Java: Clean Java Language Server Workspace** and reload so the Maven project is picked up.
+**If "Run" in the IDE fails with "SpringApplication cannot be resolved"**: the IDE is not using Maven’s classpath. Do **one** of the following: (1) Run from terminal with the command above, or **Terminal → Run Task → Run KINDR Backend**. (2) **Java: Clean Java Language Server Workspace** (Command Palette), then **Reload Window**, so the `backend` Maven project is loaded; then Run again.
 
 ## API Endpoints
 

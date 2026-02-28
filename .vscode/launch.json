@@ -5,7 +5,8 @@
       "type": "java",
       "name": "KINDR Backend",
       "request": "launch",
-      "mainClass": "com.kindr.KindrApplication"
+      "mainClass": "com.kindr.KindrApplication",
+      "projectName": "kindr-backend"
     }
   ]
 }
