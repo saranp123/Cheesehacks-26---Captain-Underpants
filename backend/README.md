@@ -4,12 +4,16 @@ Spring Boot API for the KINDR micro-volunteering app. Uses in-memory mock data (
 
 ## Run
 
+From the repo root:
+
 ```bash
 cd backend
 mvn spring-boot:run
 ```
 
 Server runs at **http://localhost:8080**.
+
+**If "Run" in the IDE fails with "SpringApplication cannot be resolved"**: the IDE is not using Maven’s classpath. Either run with the command above, or use **Terminal → Run Task → Run KINDR Backend**. To fix Run/Debug in the IDE, open the `backend` folder (where `pom.xml` is), then **Java: Clean Java Language Server Workspace** and reload so the Maven project is picked up.
 
 ## API Endpoints
 
