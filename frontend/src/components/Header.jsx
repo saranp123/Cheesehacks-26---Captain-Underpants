@@ -35,7 +35,7 @@ export default function Header() {
                 <Link to="/org/profile" className="text-slate-600 hover:text-kindr-primary flex items-center gap-1">
                   <Building2 size={18} /> Profile
                 </Link>
-                <Link to="/messages" className="text-slate-600 hover:text-kindr-primary flex items-center gap-1">
+                <Link to="/org/messages" className="text-slate-600 hover:text-kindr-primary flex items-center gap-1">
                   <MessageCircle size={18} /> Messages
                 </Link>
                 <NotificationBell />

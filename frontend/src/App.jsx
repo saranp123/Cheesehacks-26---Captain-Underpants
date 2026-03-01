@@ -11,6 +11,7 @@ import OpportunityDetailPage from './organization/OpportunityDetailPage'
 import OrganizationProfilePage from './organization/OrganizationProfilePage'
 import UserOpportunityDetailPage from './user/UserOpportunityDetailPage'
 import MessagingPage from './pages/MessagingPage'
+import OrgMessagesPage from './organization/OrgMessagesPage'
 import Login from './pages/Login'
 import { useAuth } from './context/AuthContext'
 
@@ -48,6 +49,11 @@ export default function App() {
           </ProtectedRoute>
         } />
         <Route path="messages" element={<ProtectedRoute><MessagingPage /></ProtectedRoute>} />
+        <Route path="org/messages" element={
+          <ProtectedRoute requireOrg>
+            <OrgMessagesPage />
+          </ProtectedRoute>
+        } />
         <Route path="volunteer/:id" element={<ProtectedRoute requireOrg><VolunteerProfileView /></ProtectedRoute>} />
         <Route path="org/opportunity/:id" element={<ProtectedRoute requireOrg><OpportunityDetailPage /></ProtectedRoute>} />
         <Route path="organization/:id" element={<ProtectedRoute><OrganizationProfilePage /></ProtectedRoute>} />

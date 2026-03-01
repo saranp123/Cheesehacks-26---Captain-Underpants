@@ -1,12 +1,26 @@
+import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { BADGES } from '../data/placeholders'
 import { Clock, Award, Tag } from 'lucide-react'
+import { getUser } from '../api/client'
 
 export default function ProfilePerson() {
   const { profile } = useAuth()
-  const badges = (profile?.badges || []).map(id => BADGES.find(b => b.id === id)).filter(Boolean)
-  const skills = profile?.skills || []
-  const hours = profile?.volunteer_hours ?? 0
+  const [userData, setUserData] = useState(null)
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    let cancelled = false
+    const id = profile?.id || 'mock-user'
+    setLoading(true)
+    getUser(id).then(data => { if (!cancelled) setUserData(data) }).catch(() => {}).finally(() => { if (!cancelled) setLoading(false) })
+    return () => { cancelled = true }
+  }, [profile?.id])
+
+  const src = userData || profile || {}
+  const badges = (src?.badges || []).map(id => BADGES.find(b => b.id === id)).filter(Boolean)
+  const skills = src?.skills || []
+  const hours = src?.volunteer_hours ?? src?.volunteerHours ?? 0
 
   return (
     <div>

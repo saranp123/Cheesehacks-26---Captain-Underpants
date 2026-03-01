@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { BLUEWAVE_ORG } from './profileData'
 import OrgHeroSection from './Profile/OrgHeroSection'
@@ -6,6 +6,7 @@ import MissionValuesSection from './Profile/MissionValuesSection'
 import OrgOpportunitiesSection from './Profile/OrgOpportunitiesSection'
 import ImpactSnapshot from './Profile/ImpactSnapshot'
 import VolunteerHighlights from './Profile/VolunteerHighlights'
+import { getOrg } from '../api/client'
 
 const TABS = [
   { id: 'overview', label: 'Overview' },
@@ -15,7 +16,14 @@ const TABS = [
 
 export default function ProfileOrg() {
   const [activeTab, setActiveTab] = useState('overview')
-  const org = BLUEWAVE_ORG
+  const [org, setOrg] = useState(BLUEWAVE_ORG)
+
+  useEffect(() => {
+    let cancelled = false
+    const id = BLUEWAVE_ORG?.id || 'mock-org'
+    getOrg(id).then(data => { if (!cancelled && data) setOrg(data) }).catch(() => {})
+    return () => { cancelled = true }
+  }, [])
 
   const handleContact = () => {
     window.location.href = 'mailto:hello@bluewavecollective.org'
