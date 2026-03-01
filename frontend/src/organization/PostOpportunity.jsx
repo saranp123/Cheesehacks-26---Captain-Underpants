@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { CATEGORIES, SKILLS_LIST } from '../data/placeholders'
+import { createOpportunity } from '../api/client'
 
 export default function PostOpportunity() {
   const { profile } = useAuth()
@@ -55,8 +56,25 @@ export default function PostOpportunity() {
     e.preventDefault()
     setSaving(true)
     try {
-      console.log('Mock submit opportunity:', form)
-      // reset form
+      // build payload expected by backend: orgId, title, description, requiredTags, requiredSkills, date, durationHours
+      const payload = {
+        orgId: profile?.id || form.organizationId,
+        title: form.title,
+        description: form.description,
+        requiredTags: form.badges || [],
+        requiredSkills: form.skills || [],
+        date: new Date().toISOString(),
+        durationHours: Number((form.timeCommitmentMinutes / 60).toFixed(2)),
+        category: form.category === 'Other' ? form.customCategory || 'Other' : form.category,
+      }
+
+      createOpportunity(payload).then(res => {
+        console.log('Create opportunity response:', res)
+      }).catch(err => {
+        console.error('Error creating opportunity', err)
+      })
+
+      // reset form after submit
       setForm({ ...initialForm, organizationId: profile?.id, organizationName: profile?.name })
     } finally {
       setSaving(false)

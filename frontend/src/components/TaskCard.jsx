@@ -1,6 +1,6 @@
 import { Clock, Tag, Users, CheckCircle } from 'lucide-react'
 
-export default function TaskCard({ task, userSkills = [], onClaim, onComplete, showOrg = false, assignedCount = 0 }) {
+export default function TaskCard({ task, userSkills = [], onClaim, onComplete, showOrg = false, assignedCount = 0, fitScore = null }) {
   const matchCount = (task.required_skills || []).filter(s => userSkills.includes(s)).length
   const matchLabel = matchCount === (task.required_skills || []).length ? 'Full match' : `${matchCount}/${(task.required_skills || []).length} skills`
   const isClaimed = (task.assigned_users || []).length > 0
@@ -8,7 +8,12 @@ export default function TaskCard({ task, userSkills = [], onClaim, onComplete, s
   return (
     <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex justify-between items-start gap-2">
-        <h3 className="font-semibold text-lg text-slate-800">{task.title}</h3>
+        <div className="flex items-center gap-3">
+          <h3 className="font-semibold text-lg text-slate-800">{task.title}</h3>
+          {fitScore !== null && (
+            <span className="text-xs px-2 py-1 rounded-full bg-green-100 text-green-700">Fit {Math.round(fitScore)}</span>
+          )}
+        </div>
         <span className="text-xs px-2 py-1 rounded-full bg-kindr-primary/10 text-kindr-primary whitespace-nowrap">
           {task.category}
         </span>
