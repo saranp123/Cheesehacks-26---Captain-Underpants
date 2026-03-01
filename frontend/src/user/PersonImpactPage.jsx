@@ -144,15 +144,16 @@ export default function PersonImpactPage() {
   }, [apiUrl, profile?.id])
 
   return (
-    <div className="max-w-6xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-800 mb-2">My Impact</h1>
-        <p className="text-slate-500">Your volunteer contributions, achievements, and growth</p>
-      </div>
+    <div className="min-h-screen bg-slate-50">
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">My Impact</h1>
+          <p className="text-slate-500">Your volunteer contributions, achievements, and growth</p>
+        </div>
 
-      {/* Time Range Filters */}
-      <div className="flex flex-wrap gap-2 mb-8">
-        {['1m', '3m', '6m', '1y'].map(r => (
+        {/* Time Range Filters */}
+        <div className="flex flex-wrap gap-2 mb-8">
+          {['1m', '3m', '6m', '1y'].map(r => (
           <button
             key={r}
             onClick={() => setRange(r)}
@@ -332,6 +333,7 @@ export default function PersonImpactPage() {
           </div>
         </div>
       )}
+      </div>
     </div>
   )
 }

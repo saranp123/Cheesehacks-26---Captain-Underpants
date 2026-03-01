@@ -30,45 +30,55 @@ export default function ProfilePerson() {
   const completedTasks = src?.completed_tasks ?? []
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold text-slate-800 mb-6">My profile</h1>
+    <div className="min-h-screen bg-slate-50">
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold text-slate-900 mb-8">My Profile</h1>
 
-      {error && (
-        <p className="mb-4 py-3 px-4 rounded-lg bg-red-50 text-red-800 border border-red-200">{error}</p>
-      )}
+        {error && (
+          <div className="mb-6 p-4 rounded-2xl bg-red-50 text-red-700 border border-red-200 shadow-sm">
+            <p className="font-medium text-sm">{error}</p>
+          </div>
+        )}
 
-      {loading ? (
-        <p className="text-slate-500 py-6">Loading profile…</p>
-      ) : (
-        <>
-      <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
-        <div className="flex flex-wrap gap-6">
-          <div className="w-20 h-20 rounded-full bg-kindr-primary/20 flex items-center justify-center text-3xl">
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="text-center">
+              <div className="inline-block w-8 h-8 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+              <p className="text-slate-500">Loading profile…</p>
+            </div>
+          </div>
+        ) : (
+          <>
+      <div className="bg-white rounded-2xl border border-slate-200 p-8 mb-8 shadow-sm">
+        <div className="flex items-start gap-6 mb-6">
+          <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-3xl font-bold shadow-md flex-shrink-0">
             {(src?.name || profile?.name || 'U')[0]}
           </div>
-          <div>
-            <h2 className="text-xl font-semibold text-slate-800">{src?.name || profile?.name || 'Volunteer'}</h2>
-            <p className="text-slate-500">{profile?.email}</p>
-            <div className="flex items-center gap-4 mt-2 text-sm text-slate-600">
-              <span className="flex items-center gap-1">
-                <Clock size={16} /> {hours} volunteer hours
-              </span>
-              <span className="flex items-center gap-1">
-                {completedTasks.length} tasks completed
-              </span>
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold text-slate-900 mb-1">{src?.name || profile?.name || 'Volunteer'}</h2>
+            <p className="text-slate-600 font-medium mb-4">{profile?.email}</p>
+            <div className="flex flex-wrap items-center gap-6 text-sm">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl font-bold text-blue-600">{hours}</span>
+                <span className="text-slate-600 font-medium">hours contributed</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-2xl font-bold text-green-600">{completedTasks.length}</span>
+                <span className="text-slate-600 font-medium">tasks completed</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="bg-white rounded-xl border border-slate-200 p-6">
-          <h3 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
-            <Tag size={18} /> Skills
+        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+          <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+            <Tag size={20} /> Skills
           </h3>
           <div className="flex flex-wrap gap-2">
             {skills.length ? skills.map(s => (
-              <span key={s} className="px-3 py-1 rounded-full bg-kindr-primary/10 text-kindr-primary text-sm">
+              <span key={s} className="px-4 py-2 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold">
                 {s}
               </span>
             )) : (
@@ -76,19 +86,19 @@ export default function ProfilePerson() {
             )}
           </div>
         </div>
-        <div className="bg-white rounded-xl border border-slate-200 p-6">
-          <h3 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
-            <Award size={18} /> Badges
+        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+          <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+            <Award size={20} /> Badges
           </h3>
           <div className="flex flex-wrap gap-3">
             {badges.length ? badges.map(b => (
               <div
                 key={b.id}
-                className="flex flex-col items-center p-3 rounded-lg bg-slate-50 border border-slate-100"
+                className="flex flex-col items-center p-3 rounded-xl bg-gradient-to-br from-amber-50 to-yellow-50 border border-amber-100 hover:shadow-md transition-all"
                 title={b.criteria}
               >
-                <span className="text-2xl mb-1">{b.icon}</span>
-                <span className="text-xs text-slate-600">{b.name}</span>
+                <span className="text-3xl mb-1">{b.icon}</span>
+                <span className="text-xs text-amber-900 font-semibold text-center">{b.name}</span>
               </div>
             )) : (
               <p className="text-slate-500 text-sm">Complete tasks to earn badges!</p>
@@ -98,6 +108,7 @@ export default function ProfilePerson() {
       </div>
         </>
       )}
+      </div>
     </div>
   )
 }

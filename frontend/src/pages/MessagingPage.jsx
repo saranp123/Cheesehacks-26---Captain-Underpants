@@ -142,135 +142,137 @@ export default function MessagingPage() {
   const selectedConv = conversationData.find(c => c.orgId === selected)
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-800 mb-2">My Messages</h1>
-        <p className="text-slate-500">Conversations with organizations about your volunteering activities</p>
-      </div>
+    <div className="min-h-screen bg-slate-50">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-slate-900">Messages</h1>
+          <p className="text-slate-500 text-sm mt-1">Stay connected with organizations about your volunteering</p>
+        </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col lg:flex-row overflow-hidden min-h-96">
-        {/* Left Sidebar: Conversations */}
-        <aside className="w-full lg:w-80 border-b lg:border-b-0 lg:border-r border-slate-100 flex flex-col">
-          <div className="p-4 border-b border-slate-100 sticky top-0 bg-white z-10">
-            <h2 className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-              <MessageCircle size={16} />
-              Your Conversations
-            </h2>
-          </div>
-          
-          <div className="flex-1 overflow-y-auto divide-y divide-slate-100">
-            {conversationData.map(conv => {
-              const active = selected === conv.orgId
-              return (
-                <button
-                  key={conv.orgId}
-                  onClick={() => setSelected(conv.orgId)}
-                  className={`w-full text-left p-4 hover:bg-slate-50 transition flex items-start gap-3 ${
-                    active ? 'bg-kindr-primary/5' : ''
-                  }`}
-                >
-                  <img
-                    src={conv.logo}
-                    alt={conv.name}
-                    className="w-12 h-12 rounded-full flex-shrink-0"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-2 mb-1">
-                      <p className="font-medium text-slate-900 truncate">{conv.name}</p>
-                      {unread[conv.orgId] && (
-                        <div className="w-3 h-3 rounded-full bg-rose-500 flex-shrink-0" />
-                      )}
-                    </div>
-                    <p className="text-xs text-slate-600 truncate mb-1">{conv.task}</p>
-                    <p className="text-xs text-slate-500 truncate">{conv.lastMessage}</p>
-                    <p className="text-xs text-slate-400 mt-1">{formatTime(conv.timestamp)}</p>
-                  </div>
-                </button>
-              )
-            })}
-          </div>
-        </aside>
-
-        {/* Right Panel: Chat */}
-        {selectedConv && (
-          <main className="flex-1 flex flex-col bg-gradient-to-b from-slate-50 to-white">
-            {/* Header */}
-            <div className="p-4 border-b border-slate-100 bg-white shadow-sm">
-              <div className="flex items-center gap-3">
-                <img
-                  src={selectedConv.logo}
-                  alt={selectedConv.name}
-                  className="w-12 h-12 rounded-full"
-                />
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-slate-800">{selectedConv.name}</h3>
-                  <p className="text-xs text-slate-500">{selectedConv.task}</p>
-                </div>
-                <span
-                  className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    selectedConv.status === 'active'
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-slate-100 text-slate-700'
-                  }`}
-                >
-                  {selectedConv.status === 'active' ? '🟢 Active' : '⏱️ Pending'}
-                </span>
-              </div>
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col lg:flex-row overflow-hidden min-h-[600px]">
+          {/* Left Sidebar: Conversations */}
+          <aside className="w-full lg:w-96 border-b lg:border-b-0 lg:border-r border-slate-200 flex flex-col bg-slate-50">
+            <div className="p-5 border-b border-slate-200 sticky top-0 bg-white z-10">
+              <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 flex items-center gap-2">
+                <MessageCircle size={16} />
+                Conversations
+              </h2>
             </div>
-
-            {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4">
-              {(conversations[selected] || []).map((msg, idx) => (
-                <div
-                  key={idx}
-                  className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div
-                    className={`max-w-xs px-4 py-3 rounded-2xl ${
-                      msg.sender === 'user'
-                        ? 'bg-kindr-primary text-white rounded-br-none'
-                        : 'bg-slate-100 text-slate-900 rounded-bl-none'
+            
+            <div className="flex-1 overflow-y-auto divide-y divide-slate-200">
+              {conversationData.map(conv => {
+                const active = selected === conv.orgId
+                return (
+                  <button
+                    key={conv.orgId}
+                    onClick={() => setSelected(conv.orgId)}
+                    className={`w-full text-left p-4 hover:bg-white transition-all duration-200 flex items-start gap-3 ${
+                      active ? 'bg-white border-l-4 border-l-blue-600' : ''
                     }`}
                   >
-                    <p className="break-words">{msg.text}</p>
-                    <p
-                      className={`text-xs mt-2 ${
-                        msg.sender === 'user' ? 'text-blue-100' : 'text-slate-500'
-                      }`}
-                    >
-                      {formatTime(msg.time)}
-                    </p>
+                    <img
+                      src={conv.logo}
+                      alt={conv.name}
+                      className="w-12 h-12 rounded-full flex-shrink-0 ring-2 ring-offset-2 ring-slate-200"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-2 mb-1">
+                        <p className="font-semibold text-slate-900 truncate">{conv.name}</p>
+                        {unread[conv.orgId] && (
+                          <div className="w-2.5 h-2.5 rounded-full bg-blue-600 flex-shrink-0" />
+                        )}
+                      </div>
+                      <p className="text-xs text-slate-600 truncate mb-1">{conv.task}</p>
+                      <p className="text-xs text-slate-500 truncate mb-2">{conv.lastMessage}</p>
+                      <p className="text-xs text-slate-400 font-medium">{formatTime(conv.timestamp)}</p>
+                    </div>
+                  </button>
+                )
+              })}
+            </div>
+          </aside>
+
+          {/* Right Panel: Chat */}
+          {selectedConv && (
+            <main className="flex-1 flex flex-col bg-white">
+              {/* Header */}
+              <div className="p-5 border-b border-slate-200 bg-white flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <img
+                    src={selectedConv.logo}
+                    alt={selectedConv.name}
+                    className="w-12 h-12 rounded-full ring-2 ring-offset-2 ring-slate-200"
+                  />
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold text-slate-900">{selectedConv.name}</h3>
+                    <p className="text-xs text-slate-500 font-medium">{selectedConv.task}</p>
                   </div>
                 </div>
-              ))}
-              <div ref={messagesEndRef} />
-            </div>
-
-            {/* Input */}
-            <div className="p-4 border-t border-slate-100 bg-white">
-              <div className="flex gap-3">
-                <input
-                  value={input}
-                  onChange={e => setInput(e.target.value)}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault()
-                      handleSend()
-                    }
-                  }}
-                  placeholder="Type a message..."
-                  className="flex-1 rounded-lg border border-slate-300 px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-kindr-primary focus:border-transparent"
-                />
-                <button
-                  onClick={handleSend}
-                  className="px-4 py-2.5 rounded-lg bg-kindr-primary text-white font-medium hover:bg-kindr-secondary transition flex items-center gap-2"
+                <span
+                  className={`px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide ${
+                    selectedConv.status === 'active'
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-slate-100 text-slate-600'
+                  }`}
                 >
-                  <Send size={18} />
-                </button>
+                  {selectedConv.status === 'active' ? '● Active' : '○ Pending'}
+                </span>
               </div>
-            </div>
-          </main>
-        )}
+
+              {/* Messages */}
+              <div className="flex-1 overflow-y-auto p-6 space-y-4">
+                {(conversations[selected] || []).map((msg, idx) => (
+                  <div
+                    key={idx}
+                    className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                  >
+                    <div
+                      className={`max-w-sm px-5 py-3 rounded-2xl shadow-sm ${
+                        msg.sender === 'user'
+                          ? 'bg-blue-600 text-white rounded-br-none'
+                          : 'bg-slate-100 text-slate-900 rounded-bl-none'
+                      }`}
+                    >
+                      <p className="break-words text-sm leading-relaxed">{msg.text}</p>
+                      <p
+                        className={`text-xs mt-2 font-medium ${
+                          msg.sender === 'user' ? 'text-blue-100' : 'text-slate-500'
+                        }`}
+                      >
+                        {formatTime(msg.time)}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+                <div ref={messagesEndRef} />
+              </div>
+
+              {/* Input */}
+              <div className="p-5 border-t border-slate-200 bg-white">
+                <div className="flex gap-3">
+                  <input
+                    value={input}
+                    onChange={e => setInput(e.target.value)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault()
+                        handleSend()
+                      }
+                    }}
+                    placeholder="Type your message..."
+                    className="flex-1 rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                  />
+                  <button
+                    onClick={handleSend}
+                    className="px-5 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2"
+                  >
+                    <Send size={18} />
+                  </button>
+                </div>
+              </div>
+            </main>
+          )}
+        </div>
       </div>
     </div>
   )

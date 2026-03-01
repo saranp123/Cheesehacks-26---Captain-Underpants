@@ -30,21 +30,21 @@ export default function ProfileOrg() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-slate-50">
       <OrgHeroSection org={org} onContact={handleContact} />
 
       {/* Tabs */}
-      <div className="border-b border-slate-200 mt-8 mb-6">
-        <nav className="flex gap-6" aria-label="Profile sections">
+      <div className="max-w-6xl mx-auto px-4 mt-8 mb-6">
+        <nav className="flex gap-6 border-b border-slate-200" aria-label="Profile sections">
           {TABS.map((tab) => (
             <button
               key={tab.id}
               type="button"
               onClick={() => setActiveTab(tab.id)}
-              className={`py-3 px-1 border-b-2 font-medium text-sm transition ${
+              className={`py-4 px-1 border-b-2 font-semibold text-sm transition ${
                 activeTab === tab.id
-                  ? 'border-kindr-primary text-kindr-primary'
-                  : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
+                  ? 'border-blue-600 text-blue-600'
+                  : 'border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300'
               }`}
             >
               {tab.label}
@@ -54,26 +54,28 @@ export default function ProfileOrg() {
       </div>
 
       {/* Tab content */}
-      <div className="space-y-10">
-        {activeTab === 'overview' && (
-          <>
-            <MissionValuesSection org={org} />
-            <VolunteerHighlights featuredVolunteers={org.featuredVolunteers} />
-            <JoinCTA />
-          </>
-        )}
-        {activeTab === 'opportunities' && (
-          <>
-            <OrgOpportunitiesSection opportunities={org.opportunities} orgId={org.id} />
-            <JoinCTA />
-          </>
-        )}
-        {activeTab === 'impact' && (
-          <>
-            <ImpactSnapshot org={org} />
-            <JoinCTA />
-          </>
-        )}
+      <div className="max-w-6xl mx-auto px-4 pb-12">
+        <div className="space-y-10">
+          {activeTab === 'overview' && (
+            <>
+              <MissionValuesSection org={org} />
+              <VolunteerHighlights featuredVolunteers={org.featuredVolunteers} />
+              <JoinCTA />
+            </>
+          )}
+          {activeTab === 'opportunities' && (
+            <>
+              <OrgOpportunitiesSection opportunities={org.opportunities} orgId={org.id} />
+              <JoinCTA />
+            </>
+          )}
+          {activeTab === 'impact' && (
+            <>
+              <ImpactSnapshot org={org} />
+              <JoinCTA />
+            </>
+          )}
+        </div>
       </div>
     </div>
   )

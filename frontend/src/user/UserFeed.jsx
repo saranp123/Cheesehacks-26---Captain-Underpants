@@ -54,36 +54,49 @@ export default function UserFeed() {
   }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold text-slate-800 mb-4">Discover Volunteer Opportunities</h1>
-      <Filters filters={activeFilters} onChange={setActiveFilters} />
-      
-      {error && (
-        <p className="text-red-600 py-4 rounded-xl border border-red-200 bg-red-50/50 px-4 text-center mb-4">
-          {error}
-        </p>
-      )}
-      
-      {loading ? (
-        <p className="text-slate-500">Loading...</p>
-      ) : sortedOpportunities.length === 0 ? (
-        <p className="text-slate-500 py-8 rounded-xl border border-slate-200 bg-slate-50/50 p-6 text-center">
-          No opportunities match your filters. Try adjusting your selections.
-        </p>
-      ) : (
-        <ul className="space-y-3 list-none p-0 m-0">
-          {sortedOpportunities.map((opp) => (
-            <li key={opp.id}>
+    <div className="min-h-screen bg-slate-50">
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">Discover Volunteer Opportunities</h1>
+          <p className="text-slate-500 text-sm">Find meaningful tasks that match your skills and availability</p>
+        </div>
+        
+        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm mb-6">
+          <Filters filters={activeFilters} onChange={setActiveFilters} />
+        </div>
+        
+        {error && (
+          <div className="mb-6 p-4 rounded-2xl border border-red-200 bg-red-50/80 text-red-700 shadow-sm">
+            <p className="font-medium text-sm">{error}</p>
+          </div>
+        )}
+        
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="text-center">
+              <div className="inline-block w-8 h-8 border-4 border-slate-200 border-t-kindr-primary rounded-full animate-spin mb-4"></div>
+              <p className="text-slate-500">Loading opportunities...</p>
+            </div>
+          </div>
+        ) : sortedOpportunities.length === 0 ? (
+          <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center shadow-sm">
+            <h3 className="text-lg font-semibold text-slate-800 mb-2">No opportunities found</h3>
+            <p className="text-slate-500">Try adjusting your filters to see more opportunities</p>
+          </div>
+        ) : (
+          <div className="grid gap-4">
+            {sortedOpportunities.map((opp) => (
               <OpportunityListItem
+                key={opp.id}
                 opportunity={opp}
                 matchPercentage={opp._matchPercentage ?? 0}
                 onApply={() => handleApply(opp.id)}
                 onViewDetails={() => handleViewDetails(opp.id)}
               />
-            </li>
-          ))}
-        </ul>
-      )}
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
