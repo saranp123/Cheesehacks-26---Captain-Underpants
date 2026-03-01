@@ -13,14 +13,14 @@ export default function PostOpportunity() {
   const initialForm = {
     title: '',
     description: '',
-    skills: [],
+    requiredSkills: [],
     customSkills: [],
     category: '',
     customCategory: '',
     badges: [],
     timeCommitmentMinutes: 60,
     // optional organization info for preview
-    organizationId: profile?.id,
+    orgId: profile?.id,
     organizationName: profile?.name,
   }
 
@@ -30,9 +30,9 @@ export default function PostOpportunity() {
   const toggleSkill = (skill) => {
     setForm(prev => ({
       ...prev,
-      skills: prev.skills.includes(skill)
-        ? prev.skills.filter(s => s !== skill)
-        : [...prev.skills, skill],
+      requiredSkills: prev.requiredSkills.includes(skill)
+        ? prev.requiredSkills.filter(s => s !== skill)
+        : [...prev.requiredSkills, skill],
     }))
   }
 
@@ -44,14 +44,14 @@ export default function PostOpportunity() {
       return {
         ...prev,
         customSkills: already ? prev.customSkills : [...prev.customSkills, v],
-        skills: prev.skills.includes(v) ? prev.skills : [...prev.skills, v],
+        requiredSkills: prev.requiredSkills.includes(v) ? prev.requiredSkills : [...prev.requiredSkills, v],
       }
     })
     setCustomSkillInput('')
   }
 
   const removeSkill = (skill) => {
-    setForm(prev => ({ ...prev, skills: prev.skills.filter(s => s !== skill) }))
+    setForm(prev => ({ ...prev, requiredSkills: prev.requiredSkills.filter(s => s !== skill) }))
   }
 
   const handleSubmit = async (e) => {
@@ -60,15 +60,9 @@ export default function PostOpportunity() {
     setError(null)
     setSuccess(false)
     try {
-      const payload = {
-        orgId: profile?.id || form.organizationId,
-        title: form.title,
-        requiredTags: form.badges || [],
-        requiredSkills: form.skills || [],
-      }
-      await createOpportunity(payload)
+      await createOpportunity(form)
       setSuccess(true)
-      setForm({ ...initialForm, organizationId: profile?.id, organizationName: profile?.name })
+      setForm({ ...initialForm, orgId: profile?.id, organizationName: profile?.name })
     } catch (err) {
       setError(err?.message || 'Failed to create opportunity')
     } finally {
@@ -148,7 +142,7 @@ export default function PostOpportunity() {
                 type="button"
                 onClick={() => toggleSkill(skill)}
                 className={`px-3 py-1.5 rounded-lg text-sm border transition ${
-                  form.skills.includes(skill)
+                  form.requiredSkills.includes(skill)
                     ? 'bg-kindr-primary text-white border-kindr-primary'
                     : 'border-slate-200 text-slate-600 hover:border-kindr-primary'
                 }`}
@@ -170,7 +164,7 @@ export default function PostOpportunity() {
           </div>
 
           <div className="flex flex-wrap gap-2 mt-3">
-            {form.skills.map(s => (
+            {form.requiredSkills.map(s => (
               <span key={s} className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-600 flex items-center gap-2">
                 {s}
                 <button type="button" onClick={() => removeSkill(s)} className="text-slate-400 hover:text-slate-700">✕</button>
@@ -224,7 +218,7 @@ export default function PostOpportunity() {
           </div>
           <p className="text-slate-600 text-sm mt-2">{form.description || 'Opportunity description will appear here.'}</p>
           <div className="flex flex-wrap gap-2 mt-3">
-            {form.skills.map(skill => (
+            {form.requiredSkills.map(skill => (
               <span key={skill} className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-600 flex items-center gap-1">{skill}</span>
             ))}
           </div>

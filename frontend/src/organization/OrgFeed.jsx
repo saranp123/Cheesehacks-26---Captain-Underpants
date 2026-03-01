@@ -1,11 +1,11 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { getOpportunities } from '../api/client'
 import {
   PLACEHOLDER_VOLUNTEERS,
   MOCK_APPLICATIONS,
 } from '../data/placeholders'
-import { getOpportunities, normalizeOpportunity } from '../api/client'
 import Filters from './OrgFeed/Filters'
 import TaskListItem from './OrgFeed/TaskListItem'
 
@@ -44,7 +44,6 @@ export default function OrgFeed() {
   const navigate = useNavigate()
   const [opportunityList, setOpportunityList] = useState([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
   const [filters, setFilters] = useState({
     skills: [],
     availability: [],
@@ -61,20 +60,12 @@ export default function OrgFeed() {
 
   useEffect(() => {
     let cancelled = false
-    setError(null)
-    getOpportunities()
-      .then((data) => {
-        if (cancelled) return
-        const list = Array.isArray(data) ? data.map(normalizeOpportunity).filter(Boolean) : []
-        const filtered = orgId ? list.filter((opp) => opp.orgId === orgId || opp.organizationId === orgId) : list
-        setOpportunityList(filtered)
-      })
-      .catch((err) => {
-        if (!cancelled) setError(err?.message || 'Failed to load opportunities')
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false)
-      })
+    getOpportunities({ orgId }).then((data) => {
+      if (!cancelled) {
+        setOpportunityList(data || [])
+        setLoading(false)
+      }
+    })
     return () => { cancelled = true }
   }, [orgId])
 

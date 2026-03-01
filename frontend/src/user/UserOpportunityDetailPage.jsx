@@ -1,39 +1,22 @@
-import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { getOpportunity } from '../api/client'
 import { Clock, Tag, MapPin, ArrowLeft } from 'lucide-react'
-import { getOpportunities, normalizeOpportunity } from '../api/client'
 
 export default function UserOpportunityDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
   const [opportunity, setOpportunity] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!id) {
-      setIsLoading(false)
-      return
-    }
-    let cancelled = false
-    setError(null)
-    getOpportunities()
-      .then((data) => {
-        if (cancelled) return
-        const list = Array.isArray(data) ? data.map(normalizeOpportunity).filter(Boolean) : []
-        const found = list.find((opp) => opp.id === id)
-        setOpportunity(found ?? null)
-      })
-      .catch((err) => {
-        if (!cancelled) setError(err?.message || 'Failed to load opportunity')
-      })
-      .finally(() => {
-        if (!cancelled) setIsLoading(false)
-      })
-    return () => { cancelled = true }
+    getOpportunity(id).then((data) => {
+      setOpportunity(data)
+      setLoading(false)
+    })
   }, [id])
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div>
         <button
@@ -44,21 +27,6 @@ export default function UserOpportunityDetailPage() {
           <ArrowLeft size={18} /> Back to feed
         </button>
         <p className="text-slate-500">Loading opportunity…</p>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div>
-        <button
-          type="button"
-          onClick={() => navigate('/feed')}
-          className="text-slate-500 hover:text-kindr-primary flex items-center gap-1 mb-6"
-        >
-          <ArrowLeft size={18} /> Back to feed
-        </button>
-        <p className="text-red-600 py-4">{error}</p>
       </div>
     )
   }

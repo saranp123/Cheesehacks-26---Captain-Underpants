@@ -1,13 +1,23 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { BLUEWAVE_ORG } from './profileData'
+import { useEffect, useState } from 'react'
+import { getOpportunity } from '../api/client'
 import { Clock, Tag, ArrowLeft } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 export default function OpportunityDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const opportunity = BLUEWAVE_ORG.opportunities.find((o) => o.id === id)
+  const [opportunity, setOpportunity] = useState(null)
+  const [loading, setLoading] = useState(true)
 
+  useEffect(() => {
+    getOpportunity(id).then((data) => {
+      setOpportunity(data)
+      setLoading(false)
+    })
+  }, [id])
+
+  if (loading) return <p className="text-slate-500">Loading...</p>
   if (!opportunity) {
     return (
       <div>
