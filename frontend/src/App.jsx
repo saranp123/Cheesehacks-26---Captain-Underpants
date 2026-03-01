@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Layout from './components/Layout'
 import UserFeed from './user/UserFeed'
-import OrgFeed from './organization/OrgFeed'
+import OrgMainFeed from './organization/OrgMainFeed'
 import Impact from './pages/Impact'
 import ProfilePerson from './user/ProfilePerson'
 import ProfileOrg from './organization/ProfileOrg'
@@ -38,7 +38,7 @@ export default function App() {
         } />
         <Route path="org/feed" element={
           <ProtectedRoute requireOrg>
-            <OrgFeed />
+            <OrgMainFeed />
           </ProtectedRoute>
         } />
         <Route path="impact" element={<ProtectedRoute><Impact /></ProtectedRoute>} />

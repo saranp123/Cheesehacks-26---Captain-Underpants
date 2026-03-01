@@ -44,8 +44,17 @@ Our long-term goal is to build a generation of informed, engaged citizens who se
       description: 'Lead or support a half-day river cleanup with middle schoolers. You’ll help with safety, logistics, and reflection activities.',
       required_skills: ['Teaching', 'Events'],
       timeEstimate: '3 hours',
-      time_estimate: 180,
-    },
+      time_estimate: 180,      suggested_volunteers: [
+        { id: 'sv1', name: 'Alex Chen', skills: ['Teaching', 'Events'], availability: 'Sat/Sun', timeCommitmentMinutes: 180, badges: ['⭐ Top Volunteer'] },
+        { id: 'sv2', name: 'Jordan Blake', skills: ['Physical Labor', 'Teaching'], availability: 'Weekends', timeCommitmentMinutes: 240, badges: [] },
+        { id: 'sv3', name: 'Sam Rodriguez', skills: ['Events', 'Communication'], availability: 'Sat/Sun', timeCommitmentMinutes: 180, badges: ['🌱 Eco Warrior'] },
+        { id: 'sv4', name: 'Casey Morgan', skills: ['Teaching', 'Leadership'], availability: 'Weekends', timeCommitmentMinutes: 200, badges: [] },
+      ],
+      applied_volunteers: [
+        { id: 'av1', name: 'Taylor Kim', skills: ['Teaching', 'Events'], availability: 'Sat', timeCommitmentMinutes: 180, badges: ['✨ Community Star'] },
+        { id: 'av2', name: 'Morgan Lee', skills: ['Physical Labor'], availability: 'Sun', timeCommitmentMinutes: 120, badges: [] },
+        { id: 'av3', name: 'Drew Patterson', skills: ['Leadership', 'Teaching'], availability: 'Weekends', timeCommitmentMinutes: 240, badges: [] },
+      ],    },
     {
       id: 'bw2',
       title: 'Social Media & Storytelling Volunteer',
@@ -54,6 +63,15 @@ Our long-term goal is to build a generation of informed, engaged citizens who se
       required_skills: ['Social Media', 'Writing'],
       timeEstimate: '2–3 hours',
       time_estimate: 150,
+      suggested_volunteers: [
+        { id: 'sv5', name: 'Alex Jordan', skills: ['Social Media', 'Writing'], availability: 'Flex', timeCommitmentMinutes: 150, badges: ['⭐ Top Volunteer'] },
+        { id: 'sv6', name: 'Sam Patel', skills: ['Writing', 'Design'], availability: 'Evenings', timeCommitmentMinutes: 120, badges: [] },
+        { id: 'sv7', name: 'Casey Thompson', skills: ['Social Media', 'Content Creation'], availability: 'Flex', timeCommitmentMinutes: 180, badges: [] },
+      ],
+      applied_volunteers: [
+        { id: 'av4', name: 'Riley Davis', skills: ['Social Media', 'Writing'], availability: 'Flex', timeCommitmentMinutes: 150, badges: [] },
+        { id: 'av5', name: 'Jordan White', skills: ['Design', 'Social Media'], availability: 'Weekdays', timeCommitmentMinutes: 120, badges: ['✨ Community Star'] },
+      ],
     },
     {
       id: 'bw3',
@@ -63,6 +81,17 @@ Our long-term goal is to build a generation of informed, engaged citizens who se
       required_skills: ['Events', 'Teaching'],
       timeEstimate: '4–6 hours/month',
       time_estimate: 300,
+      suggested_volunteers: [
+        { id: 'sv8', name: 'Taylor Brown', skills: ['Events', 'Leadership'], availability: 'Weekdays', timeCommitmentMinutes: 300, badges: ['🌱 Eco Warrior'] },
+        { id: 'sv9', name: 'Morgan Green', skills: ['Teaching', 'Events'], availability: 'Flex', timeCommitmentMinutes: 360, badges: [] },
+        { id: 'sv10', name: 'Casey Wu', skills: ['Coordination', 'Teaching'], availability: 'Weekends', timeCommitmentMinutes: 300, badges: [] },
+        { id: 'sv11', name: 'Drew Harris', skills: ['Events', 'Organization'], availability: 'Flex', timeCommitmentMinutes: 280, badges: ['⭐ Top Volunteer'] },
+      ],
+      applied_volunteers: [
+        { id: 'av6', name: 'Sam Martinez', skills: ['Teaching', 'Events'], availability: 'Weekends', timeCommitmentMinutes: 240, badges: [] },
+        { id: 'av7', name: 'Alex Washington', skills: ['Leadership', 'Events'], availability: 'Flex', timeCommitmentMinutes: 300, badges: ['🏆 Volunteer Champion'] },
+        { id: 'av8', name: 'Jordan Scott', skills: ['Organization', 'Teaching'], availability: 'Weekdays', timeCommitmentMinutes: 180, badges: [] },
+      ],
     },
     {
       id: 'bw4',
@@ -72,6 +101,14 @@ Our long-term goal is to build a generation of informed, engaged citizens who se
       required_skills: ['Research', 'Writing'],
       timeEstimate: '5 hours',
       time_estimate: 300,
+      suggested_volunteers: [
+        { id: 'sv12', name: 'Morgan Taylor', skills: ['Research', 'Writing'], availability: 'Flex', timeCommitmentMinutes: 300, badges: [] },
+        { id: 'sv13', name: 'Riley Anderson', skills: ['Analysis', 'Writing'], availability: 'Evenings', timeCommitmentMinutes: 240, badges: ['⭐ Top Volunteer'] },
+      ],
+      applied_volunteers: [
+        { id: 'av9', name: 'Casey Wilson', skills: ['Research', 'Analysis'], availability: 'Flex', timeCommitmentMinutes: 300, badges: [] },
+        { id: 'av10', name: 'Drew Moore', skills: ['Writing', 'Research'], availability: 'Weekdays', timeCommitmentMinutes: 360, badges: [] },
+      ],
     },
     {
       id: 'bw5',
@@ -80,8 +117,14 @@ Our long-term goal is to build a generation of informed, engaged citizens who se
       description: 'Design print and digital flyers for our annual Youth Environmental Summit. We’ll provide copy and logos.',
       required_skills: ['Design'],
       timeEstimate: '2 hours',
-      time_estimate: 120,
-    },
+      time_estimate: 120,      suggested_volunteers: [
+        { id: 'sv14', name: 'Alex Lopez', skills: ['Design', 'Graphics'], availability: 'Flex', timeCommitmentMinutes: 120, badges: ['🎨 Design Star'] },
+        { id: 'sv15', name: 'Sam Nelson', skills: ['Design', 'Digital Art'], availability: 'Evenings', timeCommitmentMinutes: 150, badges: [] },
+        { id: 'sv16', name: 'Taylor Young', skills: ['Creative', 'Design'], availability: 'Flex', timeCommitmentMinutes: 180, badges: [] },
+      ],
+      applied_volunteers: [
+        { id: 'av11', name: 'Jordan King', skills: ['Design', 'Graphic Design'], availability: 'Flex', timeCommitmentMinutes: 120, badges: ['⭐ Top Volunteer'] },
+      ],    },
     {
       id: 'bw6',
       title: 'Tutor for After-School Green Club',
@@ -90,6 +133,16 @@ Our long-term goal is to build a generation of informed, engaged citizens who se
       required_skills: ['Teaching', 'Tutoring'],
       timeEstimate: '1 hour/week',
       time_estimate: 60,
+      suggested_volunteers: [
+        { id: 'sv17', name: 'Morgan Sanchez', skills: ['Teaching', 'Tutoring'], availability: 'Weekdays', timeCommitmentMinutes: 60, badges: ['⭐ Top Volunteer'] },
+        { id: 'sv18', name: 'Casey Flores', skills: ['Tutoring', 'Education'], availability: 'Weekdays', timeCommitmentMinutes: 90, badges: [] },
+        { id: 'sv19', name: 'Riley Jackson', skills: ['Teaching', 'Communication'], availability: 'Afterschool', timeCommitmentMinutes: 60, badges: [] },
+        { id: 'sv20', name: 'Drew Phillips', skills: ['Tutoring', 'Mentoring'], availability: 'Weekdays', timeCommitmentMinutes: 120, badges: ['🌟 Mentor Leader'] },
+      ],
+      applied_volunteers: [
+        { id: 'av12', name: 'Alex Evans', skills: ['Teaching', 'Tutoring'], availability: 'Weekdays', timeCommitmentMinutes: 60, badges: [] },
+        { id: 'av13', name: 'Taylor Edwards', skills: ['Education', 'Mentoring'], availability: 'Afterschool', timeCommitmentMinutes: 90, badges: ['✨ Community Star'] },
+      ],
     },
   ],
   featuredVolunteers: [

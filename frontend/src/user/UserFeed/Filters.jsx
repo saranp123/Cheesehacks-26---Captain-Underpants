@@ -1,4 +1,5 @@
 import { Filter } from 'lucide-react'
+import { useRef, useEffect, useState } from 'react'
 import {
   SKILLS_LIST,
   AVAILABILITY_OPTIONS,
@@ -32,6 +33,21 @@ const DEFAULT_FILTERS = {
 export { DEFAULT_FILTERS }
 
 export default function Filters({ filters, onChange }) {
+  const [showDropdown, setShowDropdown] = useState(false)
+  const dropdownRef = useRef(null)
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false)
+      }
+    }
+    if (showDropdown) {
+      document.addEventListener("mousedown", handleClickOutside)
+      return () => document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [showDropdown])
+
   const toggle = (key, value) => {
     const current = filters[key] || []
     const next = current.includes(value)
@@ -49,48 +65,73 @@ export default function Filters({ filters, onChange }) {
   )
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-4 mb-6">
-      <div className="flex flex-wrap items-center gap-3 mb-3">
-        <Filter size={18} className="text-slate-500 shrink-0" />
-        <span className="text-sm font-medium text-slate-700">Filter opportunities</span>
-        {hasActive && (
-          <button
-            type="button"
-            onClick={clearAll}
-            className="text-xs text-kindr-primary hover:underline"
-          >
-            Clear all
-          </button>
+    <div className="flex items-center gap-3 mb-6">
+      <div className="relative" ref={dropdownRef}>
+        <button
+          onClick={() => setShowDropdown(!showDropdown)}
+          className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg border border-slate-200 transition"
+        >
+          <Filter size={18} className="text-slate-600" />
+          <span className="text-sm font-medium text-slate-700">Filters</span>
+          {hasActive && (
+            <span className="ml-2 inline-block w-2 h-2 bg-kindr-primary rounded-full"></span>
+          )}
+        </button>
+
+        {showDropdown && (
+          <div className="absolute left-0 mt-2 w-96 max-h-96 bg-white rounded-xl shadow-lg z-50 p-4 border border-slate-200 overflow-y-auto transition-all">
+            <div className="grid grid-cols-2 gap-4">
+              {FILTER_GROUPS.map(({ key, label, options }) => (
+                <div key={key}>
+                  <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">
+                    {label}
+                  </p>
+                  <div className="space-y-2">
+                    {options.map((opt) => {
+                      const selected = (filters[key] || []).includes(opt)
+                      return (
+                        <label
+                          key={opt}
+                          className="flex items-center gap-2 cursor-pointer"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selected}
+                            onChange={() => toggle(key, opt)}
+                            className="w-4 h-4 rounded border-slate-300 text-kindr-primary"
+                          />
+                          <span className="text-sm text-slate-600">{opt}</span>
+                        </label>
+                      )
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Footer with Clear All button */}
+            {hasActive && (
+              <button
+                type="button"
+                onClick={clearAll}
+                className="w-full mt-4 pt-4 border-t text-sm text-kindr-primary hover:text-kindr-primary/80 font-medium transition"
+              >
+                Clear all
+              </button>
+            )}
+          </div>
         )}
       </div>
-      <div className="flex flex-wrap gap-6">
-        {FILTER_GROUPS.map(({ key, label, options }) => (
-          <div key={key}>
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">
-              {label}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {options.map((opt) => {
-                const selected = (filters[key] || []).includes(opt)
-                return (
-                  <button
-                    key={opt}
-                    type="button"
-                    onClick={() => toggle(key, opt)}
-                    className={`px-2.5 py-1 rounded-lg text-sm border transition ${
-                      selected
-                        ? 'bg-kindr-primary text-white border-kindr-primary'
-                        : 'border-slate-200 text-slate-600 hover:border-kindr-primary'
-                    }`}
-                  >
-                    {opt}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        ))}
-      </div>
+
+      {hasActive && (
+        <button
+          type="button"
+          onClick={clearAll}
+          className="text-xs text-kindr-primary hover:underline"
+        >
+          Clear all
+        </button>
+      )}
     </div>
   )
 }

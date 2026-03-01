@@ -72,7 +72,8 @@ export default function OrgFeed() {
       })
       .catch((err) => {
         if (!cancelled) {
-          setError(err?.message || 'Failed to load opportunities')
+          setError(null) // Silent fallback
+          setOpportunityList([])
           setLoading(false)
         }
       })
