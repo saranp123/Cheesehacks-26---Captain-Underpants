@@ -57,15 +57,25 @@ export default function OrgFeed() {
     return init
   })
   const orgId = profile?.id
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     let cancelled = false
-    getOpportunities({ orgId }).then((data) => {
-      if (!cancelled) {
-        setOpportunityList(data || [])
-        setLoading(false)
-      }
-    })
+    setLoading(true)
+    setError(null)
+    getOpportunities({ orgId })
+      .then((data) => {
+        if (!cancelled) {
+          setOpportunityList(Array.isArray(data) ? data : [])
+          setLoading(false)
+        }
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setError(err?.message || 'Failed to load opportunities')
+          setLoading(false)
+        }
+      })
     return () => { cancelled = true }
   }, [orgId])
 

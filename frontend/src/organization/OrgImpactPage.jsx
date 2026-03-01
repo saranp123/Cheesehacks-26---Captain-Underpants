@@ -37,7 +37,7 @@ export default function OrgImpactPage() {
       fetch(`${apiUrl}/impact/org/${profile.id}`)
         .then(res => res.ok ? res.json() : null)
         .then(d => d && setData(d))
-        .catch(() => {})
+        .catch(() => setData(MOCK_ORG_IMPACT))
     }
   }, [apiUrl, profile?.id])
 

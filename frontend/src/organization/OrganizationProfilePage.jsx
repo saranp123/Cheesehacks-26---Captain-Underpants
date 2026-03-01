@@ -70,10 +70,18 @@ export default function OrganizationProfilePage() {
     )
   }
 
-  const focusAreas = org.focusAreas ?? []
-  const totalVolunteers = org.totalVolunteers ?? '—'
-  const totalHours = org.totalHours ?? '—'
-  const tasksCompleted = org.tasksCompleted ?? '—'
+  // Defensive fallback for all org fields
+  const orgName = org?.name || '—';
+  const focusAreas = Array.isArray(org?.focusAreas) ? org.focusAreas : [];
+  const totalVolunteers = org?.totalVolunteers ?? '—';
+  const totalHours = org?.totalHours ?? '—';
+  const tasksCompleted = org?.tasksCompleted ?? '—';
+  const tagline = org?.tagline || '';
+  const location = org?.location || '';
+  const website = org?.website || '';
+  const verified = !!org?.verified;
+  const description = org?.description || org?.mission || 'No description available.';
+  const testimonials = Array.isArray(org?.testimonials) ? org.testimonials : [];
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -86,20 +94,24 @@ export default function OrganizationProfilePage() {
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2 mb-1">
-                <h1 className="text-2xl md:text-3xl font-bold text-slate-800">{org.name}</h1>
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-medium">
-                  <BadgeCheck size={14} /> Verified Nonprofit
-                </span>
-              </div>
-              {org.tagline && <p className="text-slate-600 italic mb-3">{org.tagline}</p>}
-              <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500">
-                {org.location && (
-                  <span className="inline-flex items-center gap-1">
-                    <MapPin size={16} /> {org.location}
+                <h1 className="text-2xl md:text-3xl font-bold text-slate-800">{orgName}</h1>
+                {/* Only show Verified badge if org.verified is true */}
+                {verified && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-medium">
+                    <BadgeCheck size={14} /> Verified Nonprofit
                   </span>
                 )}
-                {org.website && (
-                  <a href={org.website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-kindr-primary hover:underline">
+              </div>
+              {/* Only show tagline/location/website if present */}
+              {tagline && <p className="text-slate-600 italic mb-3">{tagline}</p>}
+              <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500">
+                {location && (
+                  <span className="inline-flex items-center gap-1">
+                    <MapPin size={16} /> {location}
+                  </span>
+                )}
+                {website && (
+                  <a href={website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-kindr-primary hover:underline">
                     <ExternalLink size={16} /> Website
                   </a>
                 )}
@@ -126,7 +138,7 @@ export default function OrganizationProfilePage() {
       {/* Description & focus areas */}
       <section className="bg-white rounded-xl border border-slate-200 p-6">
         <h2 className="text-lg font-bold text-slate-800 mb-3">About</h2>
-        <p className="text-slate-600 leading-relaxed mb-4">{org.description || org.mission || 'No description available.'}</p>
+        <p className="text-slate-600 leading-relaxed mb-4">{description}</p>
         {focusAreas.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-3">
             {focusAreas.map((area) => (
@@ -185,13 +197,14 @@ export default function OrganizationProfilePage() {
         )}
       </section>
 
-      {org.testimonials && org.testimonials.length > 0 && (
+      {/* Testimonials only if present */}
+      {testimonials.length > 0 && (
         <section className="bg-white rounded-xl border border-slate-200 p-6">
           <h2 className="text-lg font-bold text-slate-800 mb-4">Volunteer testimonials</h2>
           <div className="space-y-4">
-            {org.testimonials.map((t, i) => (
+            {testimonials.map((t, i) => (
               <blockquote key={i} className="pl-4 border-l-4 border-kindr-primary/30 text-slate-600 italic">
-                &ldquo;{t.quote}&rdquo; — {t.name}
+                &ldquo;{t.quote || ''}&rdquo; — {t.name || 'Anonymous'}
               </blockquote>
             ))}
           </div>

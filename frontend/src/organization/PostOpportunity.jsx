@@ -60,7 +60,10 @@ export default function PostOpportunity() {
     setError(null)
     setSuccess(false)
     try {
-      await createOpportunity(form)
+      const response = await createOpportunity(form)
+      if (!response) {
+        throw new Error('No response from backend')
+      }
       setSuccess(true)
       setForm({ ...initialForm, orgId: profile?.id, organizationName: profile?.name })
     } catch (err) {
