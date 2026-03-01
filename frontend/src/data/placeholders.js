@@ -40,6 +40,21 @@ export function getPlaceholderOrg(uid) {
 export const TIME_COMMITMENT_OPTIONS = ['30 mins', '1 hour', '2–3 hours', 'Flexible']
 export const AVAILABILITY_OPTIONS = ['Weekdays', 'Weekends', 'Flexible']
 
+// User feed filters
+export const LOCATION_TYPE_OPTIONS = ['Remote', 'In-Person', 'Hybrid']
+export const ORGANIZATION_TYPE_OPTIONS = ['Nonprofit', 'School', 'Community', 'Other']
+export const DIFFICULTY_OPTIONS = ['Beginner', 'Intermediate', 'Advanced']
+
+// Mock user profile for User Feed (skills, interests, preferred time)
+export const USER_FEED_PROFILE = {
+  id: 'user-feed-demo',
+  name: 'Demo Volunteer',
+  skills: ['Teaching', 'Writing', 'Design'],
+  interests: ['Education', 'Community', 'Arts'],
+  preferredTime: '1 hour',
+  availability: 'Weekends',
+}
+
 export const PLACEHOLDER_TASKS = [
   {
     id: 't1',
@@ -50,11 +65,17 @@ export const PLACEHOLDER_TASKS = [
     time_estimate: 30,
     timeEstimate: '30 mins',
     category: 'Social Media',
-    organizationId: 'demo-org',
+    organizationId: 'happy-paws',
     organizationName: 'Happy Paws',
     assigned_users: [],
     status: 'open',
     badges: ['Quick Task', 'Newbie Friendly'],
+    location: 'Remote',
+    locationType: 'Remote',
+    organizationType: 'Nonprofit',
+    difficulty: 'Beginner',
+    isNew: true,
+    availability: 'Flexible',
   },
   {
     id: 't2',
@@ -70,6 +91,11 @@ export const PLACEHOLDER_TASKS = [
     assigned_users: [],
     status: 'open',
     badges: ['Newbie Friendly'],
+    location: 'Minneapolis, MN',
+    locationType: 'In-Person',
+    organizationType: 'Nonprofit',
+    difficulty: 'Intermediate',
+    availability: 'Weekends',
   },
   {
     id: 't3',
@@ -85,6 +111,11 @@ export const PLACEHOLDER_TASKS = [
     assigned_users: [],
     status: 'open',
     badges: [],
+    location: 'Virtual or Minneapolis, MN',
+    locationType: 'Hybrid',
+    organizationType: 'Nonprofit',
+    difficulty: 'Intermediate',
+    availability: 'Weekdays',
   },
   {
     id: 't4',
@@ -100,6 +131,9 @@ export const PLACEHOLDER_TASKS = [
     assigned_users: [],
     status: 'open',
     badges: [],
+    locationType: 'Remote',
+    organizationType: 'Nonprofit',
+    difficulty: 'Advanced',
   },
   {
     id: 't5',
@@ -115,6 +149,11 @@ export const PLACEHOLDER_TASKS = [
     assigned_users: [],
     status: 'open',
     badges: [],
+    location: 'St. Paul, MN',
+    locationType: 'In-Person',
+    organizationType: 'Community',
+    difficulty: 'Intermediate',
+    isUrgent: true,
   },
   {
     id: 't6',
@@ -130,6 +169,9 @@ export const PLACEHOLDER_TASKS = [
     assigned_users: [],
     status: 'open',
     badges: ['Newbie Friendly'],
+    locationType: 'Remote',
+    organizationType: 'Nonprofit',
+    difficulty: 'Beginner',
   },
   {
     id: 't7',
@@ -145,6 +187,9 @@ export const PLACEHOLDER_TASKS = [
     assigned_users: [],
     status: 'open',
     badges: ['Quick Task'],
+    locationType: 'Remote',
+    organizationType: 'Nonprofit',
+    difficulty: 'Beginner',
   },
   {
     id: 't8',
@@ -160,8 +205,65 @@ export const PLACEHOLDER_TASKS = [
     assigned_users: [],
     status: 'open',
     badges: [],
+    locationType: 'In-Person',
+    organizationType: 'Nonprofit',
+    difficulty: 'Intermediate',
   },
 ]
+
+// Mock organizations by id for Organization Profile page
+export const ORGANIZATIONS_BY_ID = {
+  'happy-paws': {
+    id: 'happy-paws',
+    name: 'Happy Paws',
+    tagline: 'Finding homes for every paw.',
+    location: 'St. Paul, MN',
+    website: 'https://happypaws.example',
+    mission: 'We rescue and rehome animals and run adoption campaigns in the Twin Cities.',
+    totalVolunteers: 28,
+    totalHours: 180,
+    tasksCompleted: 95,
+    activeOpportunities: 4,
+    description: 'Happy Paws is an animal rescue and adoption nonprofit. We rely on volunteers for social media, events, and outreach.',
+    testimonials: [
+      { name: 'Sam R.', quote: 'Such a welcoming team. I help with design and it feels meaningful.' },
+    ],
+  },
+  'demo-org': {
+    id: 'demo-org',
+    name: 'Kindr Demo Nonprofit',
+    tagline: 'Making a difference together.',
+    location: 'Minneapolis, MN',
+    website: 'https://kindr.demo',
+    mission: 'We connect volunteers with micro-tasks that fit their skills and schedule. Our mission is to make giving back easy and impactful.',
+    totalVolunteers: 45,
+    totalHours: 320,
+    tasksCompleted: 180,
+    activeOpportunities: 8,
+    description: 'Kindr Demo Nonprofit runs volunteer programs across education, community, and environment. We post micro-tasks so you can contribute in 30 minutes to a few hours.',
+    testimonials: [
+      { name: 'Alex T.', quote: 'Flexible and rewarding. I completed my first task in under an hour.' },
+      { name: 'Jordan L.', quote: 'Love that I can help on weekends without a long-term commitment.' },
+    ],
+  },
+  bluewave: {
+    id: 'bluewave',
+    name: 'BlueWave Collective',
+    tagline: 'Empowering Communities Through Action.',
+    location: 'Minneapolis, MN',
+    website: 'https://bluewavecollective.org',
+    mission: 'We bring together communities to protect our environment and empower the next generation.',
+    totalVolunteers: 128,
+    totalHours: 640,
+    tasksCompleted: 312,
+    activeOpportunities: 6,
+    description: 'BlueWave Collective was founded in 2018 in Minneapolis. We run youth environmental camps, community gardens, and sustainability workshops.',
+    testimonials: [
+      { name: 'Maya Chen', quote: 'BlueWave showed me that I could actually make a difference in my own neighborhood.' },
+      { name: 'James Okonkwo', quote: 'The youth programs here are the real deal.' },
+    ],
+  },
+}
 
 // Volunteers: timeCommitment = willingness for this opportunity (30 mins, 1 hour, 2–3 hours, Flexible)
 export const PLACEHOLDER_VOLUNTEERS = [

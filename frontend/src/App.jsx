@@ -8,6 +8,8 @@ import ProfileOrg from './organization/ProfileOrg'
 import PostOpportunity from './organization/PostOpportunity'
 import VolunteerProfileView from './organization/VolunteerProfileView'
 import OpportunityDetailPage from './organization/OpportunityDetailPage'
+import OrganizationProfilePage from './organization/OrganizationProfilePage'
+import UserOpportunityDetailPage from './user/UserOpportunityDetailPage'
 import MessagingPage from './pages/MessagingPage'
 import Login from './pages/Login'
 import { useAuth } from './context/AuthContext'
@@ -48,6 +50,8 @@ export default function App() {
         <Route path="messages" element={<ProtectedRoute><MessagingPage /></ProtectedRoute>} />
         <Route path="volunteer/:id" element={<ProtectedRoute requireOrg><VolunteerProfileView /></ProtectedRoute>} />
         <Route path="org/opportunity/:id" element={<ProtectedRoute requireOrg><OpportunityDetailPage /></ProtectedRoute>} />
+        <Route path="organization/:id" element={<ProtectedRoute><OrganizationProfilePage /></ProtectedRoute>} />
+        <Route path="opportunity/:id" element={<ProtectedRoute><UserOpportunityDetailPage /></ProtectedRoute>} />
       </Route>
       <Route path="*" element={<Navigate to="/feed" replace />} />
     </Routes>
