@@ -1,3 +1,5 @@
 node_modules/
 frontend/node_modules/
-backend/
+backend/node_modules/
+# Remove this line to allow backend commits
+# backend/
