@@ -65,7 +65,7 @@ export default function UserOpportunityDetailPage() {
         <h1 className="text-2xl font-bold text-slate-800 mt-2 mb-2">{title}</h1>
         {(organizationId || organizationName) && (
           <p className="text-sm mb-4">
-            <Link to={`/organization/${organizationId || opportunity.orgId}`} className="text-kindr-primary hover:underline font-medium">
+            <Link to={`/user/organization-profile/${organizationId === 'demo-org' ? 'kindr-demo' : organizationId || opportunity.orgId}`} className="text-kindr-primary hover:underline font-medium">
               {organizationName || 'Organization'}
             </Link>
           </p>

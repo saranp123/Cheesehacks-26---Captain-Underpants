@@ -55,7 +55,7 @@ export default function UserFeed() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-800 mb-4">Find micro-tasks</h1>
+      <h1 className="text-2xl font-bold text-slate-800 mb-4">Discover Volunteer Opportunities</h1>
       <Filters filters={activeFilters} onChange={setActiveFilters} />
       
       {error && (

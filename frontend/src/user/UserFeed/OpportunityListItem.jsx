@@ -52,7 +52,7 @@ export default function OpportunityListItem({
           {organizationId && organizationName && (
             <p className="text-sm">
               <Link
-                to={`/organization/${organizationId}`}
+                to={`/user/organization-profile/${organizationId === 'demo-org' ? 'kindr-demo' : organizationId}`}
                 className="text-kindr-primary hover:underline font-medium"
               >
                 {organizationName}

@@ -13,26 +13,27 @@ function LogoPlaceholder() {
   )
 }
 
-export default function OrganizationProfilePage() {
+export default function OrganizationProfilePage({ orgId: propOrgId }) {
   const { id } = useParams()
+  const orgId = propOrgId || id
   const [org, setOrg] = useState(null)
   const [opportunities, setOpportunities] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    if (!id) {
+    if (!orgId) {
       setIsLoading(false)
       return
     }
     let cancelled = false
     setError(null)
-    Promise.all([getOrg(id), getOpportunities()])
+    Promise.all([getOrg(orgId), getOpportunities()])
       .then(([orgData, oppsData]) => {
         if (cancelled) return
         setOrg(orgData ?? null)
         const list = Array.isArray(oppsData) ? oppsData.map(normalizeOpportunity).filter(Boolean) : []
-        const filtered = list.filter((opp) => opp.orgId === id || opp.organizationId === id)
+        const filtered = list.filter((opp) => opp.orgId === orgId || opp.organizationId === orgId)
         setOpportunities(filtered)
       })
       .catch((err) => {
@@ -42,7 +43,7 @@ export default function OrganizationProfilePage() {
         if (!cancelled) setIsLoading(false)
       })
     return () => { cancelled = true }
-  }, [id])
+  }, [orgId])
 
   if (isLoading) {
     return (

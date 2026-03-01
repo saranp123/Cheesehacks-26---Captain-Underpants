@@ -10,6 +10,8 @@ import VolunteerProfileView from './organization/VolunteerProfileView'
 import OpportunityDetailPage from './organization/OpportunityDetailPage'
 import OrganizationProfilePage from './organization/OrganizationProfilePage'
 import UserOpportunityDetailPage from './user/UserOpportunityDetailPage'
+import UserOrganizationFeedView from './user/UserOrganizationFeedView'
+import UserOrganizationProfilePage from './user/UserOrganizationProfilePage'
 import MessagingPage from './pages/MessagingPage'
 import OrgMessagesPage from './organization/OrgMessagesPage'
 import UserProfilePage from './user/UserProfilePage'
@@ -60,6 +62,8 @@ export default function App() {
         <Route path="org/opportunity/:id" element={<ProtectedRoute requireOrg><OpportunityDetailPage /></ProtectedRoute>} />
         <Route path="organization/:id" element={<ProtectedRoute><OrganizationProfilePage /></ProtectedRoute>} />
         <Route path="opportunity/:id" element={<ProtectedRoute><UserOpportunityDetailPage /></ProtectedRoute>} />
+        <Route path="/user/organization/:orgId" element={<ProtectedRoute requireOrg={false}><UserOrganizationFeedView /></ProtectedRoute>} />
+        <Route path="/user/organization-profile/:orgId" element={<ProtectedRoute requireOrg={false}><UserOrganizationProfilePage /></ProtectedRoute>} />
       </Route>
       <Route path="*" element={<Navigate to="/feed" replace />} />
     </Routes>
