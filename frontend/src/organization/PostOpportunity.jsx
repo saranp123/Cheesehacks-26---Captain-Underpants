@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { CATEGORIES, SKILLS_LIST } from '../data/placeholders'
 import { createOpportunity } from '../api/client'
 
-export default function PostOpportunity() {
+export default function PostOpportunity({ onOpportunityCreated }) {
   const { profile } = useAuth()
+  const navigate = useNavigate()
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(false)
@@ -19,7 +21,6 @@ export default function PostOpportunity() {
     customCategory: '',
     badges: [],
     timeCommitmentMinutes: 60,
-    // optional organization info for preview
     orgId: profile?.id,
     organizationName: profile?.name,
   }
@@ -60,12 +61,36 @@ export default function PostOpportunity() {
     setError(null)
     setSuccess(false)
     try {
-      const response = await createOpportunity(form)
+      const payload = {
+        title: form.title,
+        description: form.description,
+        requiredSkills: form.requiredSkills,
+        category: form.category === 'Other' ? form.customCategory : form.category,
+        durationMinutes: form.timeCommitmentMinutes,
+        orgId: profile?.id,
+        organizationName: profile?.name,
+        badges: form.badges,
+      }
+      
+      const response = await createOpportunity(payload)
       if (!response) {
         throw new Error('No response from backend')
       }
+      
       setSuccess(true)
+      
+      // Call callback if provided
+      if (onOpportunityCreated) {
+        onOpportunityCreated(response)
+      }
+      
+      // Reset form
       setForm({ ...initialForm, orgId: profile?.id, organizationName: profile?.name })
+      
+      // Redirect to org feed after 1 second
+      setTimeout(() => {
+        navigate('/org/feed')
+      }, 1000)
     } catch (err) {
       setError(err?.message || 'Failed to create opportunity')
     } finally {

@@ -1,4 +1,6 @@
 import React, { useMemo, useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const orgFeedMock = [
   {
@@ -67,6 +69,8 @@ function formatDuration(mins) {
 }
 
 export default function OrgMainFeed() {
+  const navigate = useNavigate();
+  const { profile } = useAuth();
   const [opportunities] = useState(orgFeedMock);
   const [selectedSkill, setSelectedSkill] = useState("");
   const [selectedAvailability, setSelectedAvailability] = useState("");
@@ -114,12 +118,20 @@ export default function OrgMainFeed() {
     });
   }, [opportunities, selectedSkill, selectedAvailability, selectedTimeRange]);
 
-  function handleMessage(vol) {
-    // placeholder action — state-only
-    alert(`Message ${vol.name} (mock)`);
+  function handleMessage(volunteer) {
+    // Navigate to messaging page with volunteer info in state
+    navigate('/org/messages', { 
+      state: { 
+        recipientName: volunteer.name,
+        recipientId: volunteer.id,
+        volunteerId: volunteer.id
+      } 
+    })
   }
-  function handleViewProfile(vol) {
-    alert(`View profile for ${vol.name} (mock)`);
+
+  function handleViewProfile(volunteer) {
+    // Navigate to volunteer profile
+    navigate(`/volunteer/${volunteer.id}`)
   }
 
   return (

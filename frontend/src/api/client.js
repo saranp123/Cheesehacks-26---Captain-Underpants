@@ -126,3 +126,10 @@ export const getNotificationsApi = (userId) => apiGet(`/notifications/${userId}`
 // Messages
 export const sendMessage = (senderId, recipientId, message) =>
   apiPost('/messages', { senderId, recipientId, message })
+
+// Applications
+export const applyToOpportunity = (userId, opportunityId) =>
+  apiPost('/applications', { userId, opportunityId })
+
+export const completeOpportunity = (userId, opportunityId, hoursSpent) =>
+  apiPost(`/opportunities/${opportunityId}/complete`, { userId, hoursSpent })

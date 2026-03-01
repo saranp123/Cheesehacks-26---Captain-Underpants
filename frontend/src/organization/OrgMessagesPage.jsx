@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
+import { useLocation } from 'react-router-dom'
 import { MessageCircle, Users, CheckCircle, Send, MessageSquare } from 'lucide-react'
 
 /*
@@ -115,6 +116,7 @@ const MOCK_APPLIED_VOLUNTEERS = [
 ]
 
 export default function OrgMessagesPage() {
+  const location = useLocation()
   const [conversations, setConversations] = useState(
     MOCK_CONVERSATIONS.reduce((acc, conv) => {
       acc[conv.volunteerId] = conv.messages
@@ -122,7 +124,10 @@ export default function OrgMessagesPage() {
     }, {})
   )
   const [conversationData, setConversationData] = useState(MOCK_CONVERSATIONS)
-  const [selected, setSelected] = useState(MOCK_CONVERSATIONS[0].volunteerId)
+  
+  // Initialize selected based on passed state or default to first
+  const initialSelected = location.state?.volunteerId || location.state?.recipientId || MOCK_CONVERSATIONS[0].volunteerId
+  const [selected, setSelected] = useState(initialSelected)
   const [input, setInput] = useState('')
   const [activeTab, setActiveTab] = useState('conversations')
   const [unread, setUnread] = useState(() => {

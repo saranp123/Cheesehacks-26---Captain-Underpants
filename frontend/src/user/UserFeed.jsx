@@ -4,13 +4,17 @@ import OpportunityListItem from './UserFeed/OpportunityListItem'
 import { sortByRecommendation } from './UserFeed/RecommendationUtils'
 import { applyOpportunityFilters } from './UserFeed/applyFilters'
 import { USER_FEED_PROFILE, PLACEHOLDER_TASKS } from '../data/placeholders'
-import { getOpportunities } from '../api/client'
+import { getOpportunities, applyToOpportunity } from '../api/client'
+import { useAuth } from '../context/AuthContext'
 
 export default function UserFeed() {
+  const { profile } = useAuth()
   const [activeFilters, setActiveFilters] = useState(DEFAULT_FILTERS)
   const [opportunityList, setOpportunityList] = useState(PLACEHOLDER_TASKS)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [appliedOpportunities, setAppliedOpportunities] = useState(new Set())
+  const [loadingOpid, setLoadingOpid] = useState(null)
 
   useEffect(() => {
     let cancelled = false
@@ -43,15 +47,31 @@ export default function UserFeed() {
     [filteredOpportunities, USER_FEED_PROFILE]
   )
 
-  const handleApply = (taskId) => {
-    // TODO: Implement backend apply logic
-    console.log('Apply for task:', taskId)
+  const handleApply = async (opportunityId) => {
+    if (!profile?.id) return
+    
+    // Optimistic UI update
+    setAppliedOpportunities(prev => new Set([...prev, opportunityId]))
+    setLoadingOpid(opportunityId)
+
+    try {
+      const userId = profile.id
+      await applyToOpportunity(userId, opportunityId)
+      // Success - UI already updated optimistically
+    } catch (err) {
+      // Rollback on error
+      setAppliedOpportunities(prev => {
+        const next = new Set(prev)
+        next.delete(opportunityId)
+        return next
+      })
+      setError(err.message || 'Failed to apply for opportunity')
+    } finally {
+      setLoadingOpid(null)
+    }
   }
 
-  const handleViewDetails = (taskId) => {
-    window.location.hash = ''
-    // Navigation is handled by Link in OpportunityListItem
-  }
+
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -90,6 +110,8 @@ export default function UserFeed() {
                 key={opp.id}
                 opportunity={opp}
                 matchPercentage={opp._matchPercentage ?? 0}
+                isApplied={appliedOpportunities.has(opp.id)}
+                isLoading={loadingOpid === opp.id}
                 onApply={() => handleApply(opp.id)}
                 onViewDetails={() => handleViewDetails(opp.id)}
               />

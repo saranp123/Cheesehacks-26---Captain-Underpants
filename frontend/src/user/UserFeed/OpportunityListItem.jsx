@@ -4,6 +4,8 @@ import { Clock, MapPin, Tag } from 'lucide-react'
 export default function OpportunityListItem({
   opportunity,
   matchPercentage = 0,
+  isApplied = false,
+  isLoading = false,
   onApply,
   onViewDetails,
 }) {
@@ -105,14 +107,25 @@ export default function OpportunityListItem({
             </div>
           </div>
           <div className="flex gap-2">
-            {onApply && (
+            {isApplied ? (
               <button
                 type="button"
-                onClick={() => onApply(id)}
-                className="px-4 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow-md flex-1 sm:flex-none"
+                disabled
+                className="px-4 py-2.5 rounded-xl bg-slate-300 text-slate-700 text-sm font-semibold cursor-not-allowed flex-1 sm:flex-none"
               >
-                Apply
+                Applied
               </button>
+            ) : (
+              onApply && (
+                <button
+                  type="button"
+                  onClick={() => onApply(id)}
+                  disabled={isLoading}
+                  className="px-4 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow-md flex-1 sm:flex-none disabled:opacity-50"
+                >
+                  {isLoading ? 'Applying...' : 'Apply'}
+                </button>
+              )
             )}
             {onViewDetails && (
               <Link
