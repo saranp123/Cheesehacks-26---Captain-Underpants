@@ -37,7 +37,7 @@ export default function Login() {
             Kindr
           </div>
         </div>
-        <p className="text-center text-slate-500 text-sm mb-6">Micro-volunteering for students & nonprofits</p>
+        <p className="text-center text-slate-500 text-sm mb-6">Small Acts. Sustainable Impact.</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {signUp && (

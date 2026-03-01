@@ -19,9 +19,15 @@ export default function Header() {
     <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="flex items-center justify-between h-14">
-          <Link to={isOrg ? '/org/feed' : '/feed'} className="flex items-center gap-2 text-kindr-primary font-bold text-xl">
-            <Heart className="w-6 h-6" />
-            Kindr
+          <Link to={isOrg ? '/org/feed' : '/feed'} className="flex items-center gap-2">
+            <Heart className="w-6 h-6 text-kindr-primary" />
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-xl text-kindr-primary">Kindr</span>
+              <span className="text-slate-400 hidden sm:inline">|</span>
+              <span className="text-slate-500 text-xs sm:text-sm font-normal hidden sm:inline">
+                Small Acts. Sustainable Impact.
+              </span>
+            </div>
           </Link>
           <nav className="flex items-center gap-4">
             {isOrg ? (
