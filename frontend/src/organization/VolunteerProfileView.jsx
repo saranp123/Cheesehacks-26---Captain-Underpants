@@ -1,15 +1,58 @@
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { PLACEHOLDER_VOLUNTEERS } from '../data/placeholders'
 import { getFeaturedVolunteer } from './profileData'
+import { getUser, normalizeUser } from '../api/client'
 import { MessageCircle, ArrowLeft, Clock, Award, User } from 'lucide-react'
 
 export default function VolunteerProfileView() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const volunteer = PLACEHOLDER_VOLUNTEERS.find((v) => v.id === id)
-  const featured = getFeaturedVolunteer(id)
+  const [volunteer, setVolunteer] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  if (!volunteer && !featured) {
+  const featured = getFeaturedVolunteer(id)
+  const placeholderVolunteer = PLACEHOLDER_VOLUNTEERS.find((v) => v.id === id)
+
+  useEffect(() => {
+    if (!id) {
+      setIsLoading(false)
+      return
+    }
+    let cancelled = false
+    setError(null)
+    getUser(id)
+      .then((data) => {
+        if (!cancelled && data) setVolunteer(normalizeUser(data) ?? data)
+      })
+      .catch(() => {
+        if (!cancelled) setVolunteer(placeholderVolunteer ?? null)
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false)
+      })
+    return () => { cancelled = true }
+  }, [id])
+
+  const displayVolunteer = volunteer ?? placeholderVolunteer
+
+  if (isLoading) {
+    return (
+      <div>
+        <button
+          type="button"
+          onClick={() => navigate('/org/feed')}
+          className="text-slate-500 hover:text-kindr-primary flex items-center gap-1 mb-6"
+        >
+          <ArrowLeft size={18} /> Back to feed
+        </button>
+        <p className="text-slate-500">Loading volunteer…</p>
+      </div>
+    )
+  }
+
+  if (!displayVolunteer && !featured) {
     return (
       <div>
         <button
@@ -24,7 +67,7 @@ export default function VolunteerProfileView() {
     )
   }
 
-  if (featured && !volunteer) {
+  if (featured && !displayVolunteer) {
     return (
       <div>
         <button
@@ -52,10 +95,13 @@ export default function VolunteerProfileView() {
     )
   }
 
-  const { name, skills = [], availability, timeCommitment, tasksCompleted = 0, volunteer_hours = 0, badges = [] } = volunteer
+  const { name, skills = [], availability, timeCommitment, tasksCompleted = 0, volunteer_hours = 0, badges = [] } = displayVolunteer
 
   return (
     <div>
+      {error && (
+        <p className="mb-4 py-3 px-4 rounded-lg bg-amber-50 text-amber-800 border border-amber-200 text-sm">{error}</p>
+      )}
       <button
         type="button"
         onClick={() => navigate('/org/feed')}
@@ -66,13 +112,13 @@ export default function VolunteerProfileView() {
       <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
         <div className="flex flex-wrap gap-6">
           <div className="w-16 h-16 rounded-full bg-kindr-primary/20 flex items-center justify-center text-2xl font-semibold text-kindr-primary">
-            {name.charAt(0)}
+            {(name || '?').charAt(0)}
           </div>
           <div>
             <h1 className="text-xl font-semibold text-slate-800">{name}</h1>
             <div className="flex items-center gap-4 mt-2 text-sm text-slate-600">
               <span className="flex items-center gap-1">
-                <Clock size={16} /> {availability} · {timeCommitment || '—'}
+                <Clock size={16} /> {availability ?? '—'} · {timeCommitment || '—'}
               </span>
               <span>{tasksCompleted} tasks · {volunteer_hours} hrs</span>
             </div>
@@ -99,12 +145,13 @@ export default function VolunteerProfileView() {
                 {s}
               </span>
             ))}
+            {skills.length === 0 && <p className="text-slate-500 text-sm">No skills listed.</p>}
           </div>
         </div>
         {badges.length > 0 && (
           <div className="bg-white rounded-xl border border-slate-200 p-6">
             <h3 className="font-semibold text-slate-800 mb-3">Badges</h3>
-            <p className="text-slate-600 text-sm">{badges.join(', ')}</p>
+            <p className="text-slate-600 text-sm">{Array.isArray(badges) ? badges.join(', ') : badges}</p>
           </div>
         )}
       </div>

@@ -2,18 +2,23 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { BADGES } from '../data/placeholders'
 import { Clock, Award, Tag } from 'lucide-react'
-import { getUser } from '../api/client'
+import { getUser, normalizeUser } from '../api/client'
 
 export default function ProfilePerson() {
   const { profile } = useAuth()
   const [userData, setUserData] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     let cancelled = false
-    const id = profile?.id || 'mock-user'
+    const id = profile?.id || 'v_10485'
     setLoading(true)
-    getUser(id).then(data => { if (!cancelled) setUserData(data) }).catch(() => {}).finally(() => { if (!cancelled) setLoading(false) })
+    setError(null)
+    getUser(id)
+      .then((data) => { if (!cancelled) setUserData(normalizeUser(data) ?? data) })
+      .catch((err) => { if (!cancelled) setError(err?.message || 'Failed to load profile') })
+      .finally(() => { if (!cancelled) setLoading(false) })
     return () => { cancelled = true }
   }, [profile?.id])
 
@@ -22,23 +27,34 @@ export default function ProfilePerson() {
   const skills = src?.skills || []
   const hours = src?.volunteer_hours ?? src?.volunteerHours ?? 0
 
+  const completedTasks = src?.completed_tasks ?? []
+
   return (
     <div>
       <h1 className="text-2xl font-bold text-slate-800 mb-6">My profile</h1>
+
+      {error && (
+        <p className="mb-4 py-3 px-4 rounded-lg bg-red-50 text-red-800 border border-red-200">{error}</p>
+      )}
+
+      {loading ? (
+        <p className="text-slate-500 py-6">Loading profile…</p>
+      ) : (
+        <>
       <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
         <div className="flex flex-wrap gap-6">
           <div className="w-20 h-20 rounded-full bg-kindr-primary/20 flex items-center justify-center text-3xl">
-            {(profile?.name || 'U')[0]}
+            {(src?.name || profile?.name || 'U')[0]}
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-slate-800">{profile?.name || 'Volunteer'}</h2>
+            <h2 className="text-xl font-semibold text-slate-800">{src?.name || profile?.name || 'Volunteer'}</h2>
             <p className="text-slate-500">{profile?.email}</p>
             <div className="flex items-center gap-4 mt-2 text-sm text-slate-600">
               <span className="flex items-center gap-1">
                 <Clock size={16} /> {hours} volunteer hours
               </span>
               <span className="flex items-center gap-1">
-                {(profile?.completed_tasks || []).length} tasks completed
+                {completedTasks.length} tasks completed
               </span>
             </div>
           </div>
@@ -80,6 +96,8 @@ export default function ProfilePerson() {
           </div>
         </div>
       </div>
+        </>
+      )}
     </div>
   )
 }

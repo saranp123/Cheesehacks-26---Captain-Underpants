@@ -1,0 +1,87 @@
+{
+  "info": {
+    "name": "KINDR MVP Endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get Volunteer Profile",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/users/v_10485",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "users", "v_10485"]
+        }
+      }
+    },
+    {
+      "name": "Get Organization Profile",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/organizations/org_001",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "organizations", "org_001"]
+        }
+      }
+    },
+    {
+      "name": "Get All Opportunities",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/opportunities",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "opportunities"]
+        }
+      }
+    },
+    {
+      "name": "Create Opportunity",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"orgId\": \"org_001\",\n  \"title\": \"Weekend Pantry Restock\",\n  \"date\": \"2026-03-07T09:00:00Z\",\n  \"durationHours\": 3,\n  \"requiredTags\": [\n    \"Food Security\"\n  ],\n  \"requiredSkills\": [\n    \"Heavy Lifting\"\n  ]\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/opportunities",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "opportunities"]
+        }
+      }
+    },
+    {
+      "name": "Calculate Fit Score",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/match/v_10485/opp_993",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "match", "v_10485", "opp_993"]
+        }
+      }
+    }
+  ]
+}

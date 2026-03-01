@@ -6,6 +6,8 @@ import { createOpportunity } from '../api/client'
 export default function PostOpportunity() {
   const { profile } = useAuth()
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState(null)
+  const [success, setSuccess] = useState(false)
   const [customSkillInput, setCustomSkillInput] = useState('')
 
   const initialForm = {
@@ -52,30 +54,23 @@ export default function PostOpportunity() {
     setForm(prev => ({ ...prev, skills: prev.skills.filter(s => s !== skill) }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setSaving(true)
+    setError(null)
+    setSuccess(false)
     try {
-      // build payload expected by backend: orgId, title, description, requiredTags, requiredSkills, date, durationHours
       const payload = {
         orgId: profile?.id || form.organizationId,
         title: form.title,
-        description: form.description,
         requiredTags: form.badges || [],
         requiredSkills: form.skills || [],
-        date: new Date().toISOString(),
-        durationHours: Number((form.timeCommitmentMinutes / 60).toFixed(2)),
-        category: form.category === 'Other' ? form.customCategory || 'Other' : form.category,
       }
-
-      createOpportunity(payload).then(res => {
-        console.log('Create opportunity response:', res)
-      }).catch(err => {
-        console.error('Error creating opportunity', err)
-      })
-
-      // reset form after submit
+      await createOpportunity(payload)
+      setSuccess(true)
       setForm({ ...initialForm, organizationId: profile?.id, organizationName: profile?.name })
+    } catch (err) {
+      setError(err?.message || 'Failed to create opportunity')
     } finally {
       setSaving(false)
     }
@@ -84,6 +79,18 @@ export default function PostOpportunity() {
   return (
     <div>
       <h1 className="text-2xl font-bold text-slate-800 mb-6">Post an opportunity</h1>
+
+      {success && (
+        <p className="mb-4 py-3 px-4 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200">
+          Opportunity posted successfully.
+        </p>
+      )}
+      {error && (
+        <p className="mb-4 py-3 px-4 rounded-lg bg-red-50 text-red-800 border border-red-200">
+          {error}
+        </p>
+      )}
+
       <form onSubmit={handleSubmit} className="max-w-xl space-y-5">
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">Title</label>

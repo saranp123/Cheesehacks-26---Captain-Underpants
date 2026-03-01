@@ -1,6 +1,7 @@
+import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { MapPin, ExternalLink, Users, Clock, ListTodo, BadgeCheck } from 'lucide-react'
-import { ORGANIZATIONS_BY_ID, PLACEHOLDER_TASKS } from '../data/placeholders'
+import { getOrg, getOpportunities, normalizeOpportunity } from '../api/client'
 
 function LogoPlaceholder() {
   return (
@@ -14,7 +15,51 @@ function LogoPlaceholder() {
 
 export default function OrganizationProfilePage() {
   const { id } = useParams()
-  const org = id ? ORGANIZATIONS_BY_ID[id] : null
+  const [org, setOrg] = useState(null)
+  const [opportunities, setOpportunities] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    if (!id) {
+      setIsLoading(false)
+      return
+    }
+    let cancelled = false
+    setError(null)
+    Promise.all([getOrg(id), getOpportunities()])
+      .then(([orgData, oppsData]) => {
+        if (cancelled) return
+        setOrg(orgData ?? null)
+        const list = Array.isArray(oppsData) ? oppsData.map(normalizeOpportunity).filter(Boolean) : []
+        const filtered = list.filter((opp) => opp.orgId === id || opp.organizationId === id)
+        setOpportunities(filtered)
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err?.message || 'Failed to load organization')
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false)
+      })
+    return () => { cancelled = true }
+  }, [id])
+
+  if (isLoading) {
+    return (
+      <div className="max-w-4xl mx-auto">
+        <p className="text-slate-500 py-8">Loading organization…</p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-4xl mx-auto">
+        <p className="text-red-600 py-4">{error}</p>
+        <Link to="/feed" className="text-kindr-primary hover:underline">Back to feed</Link>
+      </div>
+    )
+  }
 
   if (!org) {
     return (
@@ -25,7 +70,10 @@ export default function OrganizationProfilePage() {
     )
   }
 
-  const postedOpportunities = PLACEHOLDER_TASKS.filter((t) => t.organizationId === id)
+  const focusAreas = org.focusAreas ?? []
+  const totalVolunteers = org.totalVolunteers ?? '—'
+  const totalHours = org.totalHours ?? '—'
+  const tasksCompleted = org.tasksCompleted ?? '—'
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -59,15 +107,15 @@ export default function OrganizationProfilePage() {
               <div className="flex flex-wrap gap-6 mt-4 text-sm">
                 <span className="inline-flex items-center gap-1.5 text-slate-700">
                   <Users size={18} className="text-kindr-primary" />
-                  <strong>{org.totalVolunteers}</strong> Volunteers
+                  <strong>{totalVolunteers}</strong> Volunteers
                 </span>
                 <span className="inline-flex items-center gap-1.5 text-slate-700">
                   <Clock size={18} className="text-kindr-primary" />
-                  <strong>{org.totalHours}</strong> Hours
+                  <strong>{totalHours}</strong> Hours
                 </span>
                 <span className="inline-flex items-center gap-1.5 text-slate-700">
                   <ListTodo size={18} className="text-kindr-primary" />
-                  <strong>{org.activeOpportunities}</strong> Active Opportunities
+                  <strong>{opportunities.length}</strong> Active Opportunities
                 </span>
               </div>
             </div>
@@ -75,12 +123,18 @@ export default function OrganizationProfilePage() {
         </div>
       </section>
 
-      {/* Description & Mission */}
+      {/* Description & focus areas */}
       <section className="bg-white rounded-xl border border-slate-200 p-6">
         <h2 className="text-lg font-bold text-slate-800 mb-3">About</h2>
-        <p className="text-slate-600 leading-relaxed mb-4">{org.description || org.mission}</p>
-        {org.mission && org.description && org.mission !== org.description && (
-          <p className="text-slate-600 leading-relaxed">{org.mission}</p>
+        <p className="text-slate-600 leading-relaxed mb-4">{org.description || org.mission || 'No description available.'}</p>
+        {focusAreas.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-3">
+            {focusAreas.map((area) => (
+              <span key={area} className="px-2 py-1 rounded-lg bg-kindr-primary/10 text-kindr-primary text-sm">
+                {area}
+              </span>
+            ))}
+          </div>
         )}
       </section>
 
@@ -89,19 +143,19 @@ export default function OrganizationProfilePage() {
         <h2 className="text-lg font-bold text-slate-800 mb-4">Impact</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="rounded-lg bg-slate-50 p-4 text-center">
-            <p className="text-2xl font-bold text-kindr-primary">{org.totalVolunteers}</p>
+            <p className="text-2xl font-bold text-kindr-primary">{totalVolunteers}</p>
             <p className="text-sm text-slate-600">Total Volunteers</p>
           </div>
           <div className="rounded-lg bg-slate-50 p-4 text-center">
-            <p className="text-2xl font-bold text-kindr-primary">{org.totalHours}</p>
+            <p className="text-2xl font-bold text-kindr-primary">{totalHours}</p>
             <p className="text-sm text-slate-600">Volunteer Hours</p>
           </div>
           <div className="rounded-lg bg-slate-50 p-4 text-center">
-            <p className="text-2xl font-bold text-kindr-primary">{org.tasksCompleted}</p>
+            <p className="text-2xl font-bold text-kindr-primary">{tasksCompleted}</p>
             <p className="text-sm text-slate-600">Tasks Completed</p>
           </div>
           <div className="rounded-lg bg-slate-50 p-4 text-center">
-            <p className="text-2xl font-bold text-kindr-primary">{org.activeOpportunities}</p>
+            <p className="text-2xl font-bold text-kindr-primary">{opportunities.length}</p>
             <p className="text-sm text-slate-600">Posted Opportunities</p>
           </div>
         </div>
@@ -110,11 +164,11 @@ export default function OrganizationProfilePage() {
       {/* Posted opportunities */}
       <section className="bg-white rounded-xl border border-slate-200 p-6">
         <h2 className="text-lg font-bold text-slate-800 mb-4">Posted opportunities</h2>
-        {postedOpportunities.length === 0 ? (
+        {opportunities.length === 0 ? (
           <p className="text-slate-500">No opportunities posted yet.</p>
         ) : (
           <ul className="space-y-2">
-            {postedOpportunities.map((opp) => (
+            {opportunities.map((opp) => (
               <li key={opp.id}>
                 <Link
                   to={`/opportunity/${opp.id}`}
@@ -122,7 +176,7 @@ export default function OrganizationProfilePage() {
                 >
                   <span className="font-medium text-slate-800">{opp.title}</span>
                   <span className="text-sm text-slate-500 ml-2">
-                    {opp.timeEstimate || (opp.time_estimate ? `${opp.time_estimate} min` : '')} · {opp.category}
+                    {opp.timeEstimate || (opp.time_estimate ? `${opp.time_estimate} min` : '')} {opp.category ? `· ${opp.category}` : ''}
                   </span>
                 </Link>
               </li>
@@ -131,14 +185,13 @@ export default function OrganizationProfilePage() {
         )}
       </section>
 
-      {/* Testimonials (placeholder) */}
       {org.testimonials && org.testimonials.length > 0 && (
         <section className="bg-white rounded-xl border border-slate-200 p-6">
           <h2 className="text-lg font-bold text-slate-800 mb-4">Volunteer testimonials</h2>
           <div className="space-y-4">
             {org.testimonials.map((t, i) => (
               <blockquote key={i} className="pl-4 border-l-4 border-kindr-primary/30 text-slate-600 italic">
-                "{t.quote}" — {t.name}
+                &ldquo;{t.quote}&rdquo; — {t.name}
               </blockquote>
             ))}
           </div>

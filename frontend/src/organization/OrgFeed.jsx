@@ -1,11 +1,11 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { fetchTasks } from '../firebase/tasks'
 import {
   PLACEHOLDER_VOLUNTEERS,
   MOCK_APPLICATIONS,
 } from '../data/placeholders'
+import { getOpportunities, normalizeOpportunity } from '../api/client'
 import Filters from './OrgFeed/Filters'
 import TaskListItem from './OrgFeed/TaskListItem'
 
@@ -44,6 +44,7 @@ export default function OrgFeed() {
   const navigate = useNavigate()
   const [opportunityList, setOpportunityList] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [filters, setFilters] = useState({
     skills: [],
     availability: [],
@@ -60,12 +61,20 @@ export default function OrgFeed() {
 
   useEffect(() => {
     let cancelled = false
-    fetchTasks({ organizationId: orgId }).then((data) => {
-      if (!cancelled) {
-        setOpportunityList(data || [])
-        setLoading(false)
-      }
-    })
+    setError(null)
+    getOpportunities()
+      .then((data) => {
+        if (cancelled) return
+        const list = Array.isArray(data) ? data.map(normalizeOpportunity).filter(Boolean) : []
+        const filtered = orgId ? list.filter((opp) => opp.orgId === orgId || opp.organizationId === orgId) : list
+        setOpportunityList(filtered)
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err?.message || 'Failed to load opportunities')
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
     return () => { cancelled = true }
   }, [orgId])
 
@@ -79,7 +88,6 @@ export default function OrgFeed() {
   }
 
   const handleNotify = (volunteer) => {
-    // Placeholder: could call API or show toast
     console.log('Notify suggested user:', volunteer.name)
   }
 
@@ -119,6 +127,12 @@ export default function OrgFeed() {
       <h1 className="text-2xl font-bold text-slate-800 mb-4">Your posted opportunities</h1>
 
       <Filters filters={filters} onChange={setFilters} />
+
+      {error && (
+        <p className="text-red-600 py-4 rounded-xl border border-red-200 bg-red-50/50 px-4 text-center mb-4">
+          {error}
+        </p>
+      )}
 
       {loading ? (
         <p className="text-slate-500">Loading...</p>
