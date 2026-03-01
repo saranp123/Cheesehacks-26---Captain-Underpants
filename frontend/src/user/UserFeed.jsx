@@ -61,7 +61,7 @@ export default function UserFeed() {
           <p className="text-slate-500 text-sm">Find meaningful tasks that match your skills and availability</p>
         </div>
         
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm mb-6">
+        <div className="mb-6">
           <Filters filters={activeFilters} onChange={setActiveFilters} />
         </div>
         

@@ -88,7 +88,8 @@ export default function PostOpportunity() {
         </p>
       )}
 
-      <form onSubmit={handleSubmit} className="max-w-xl space-y-5">
+      <div className="flex flex-col lg:flex-row gap-6">
+        <form onSubmit={handleSubmit} className="flex-1 space-y-5">
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">Title</label>
           <input
@@ -208,26 +209,27 @@ export default function PostOpportunity() {
         >
           {saving ? 'Saving...' : 'Post opportunity'}
         </button>
-      </form>
+        </form>
 
-      <div className="mt-8 max-w-xl">
-        <h2 className="text-lg font-semibold text-slate-800 mb-3">Live preview</h2>
-        <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
-          <div className="flex justify-between items-start gap-2">
-            <h3 className="font-semibold text-lg text-slate-800">{form.title || 'Opportunity title'}</h3>
-            <span className="text-xs px-2 py-1 rounded-full bg-kindr-primary/10 text-kindr-primary whitespace-nowrap">
-              {form.category === 'Other' ? (form.customCategory || 'Other') : (form.category || 'Uncategorized')}
-            </span>
-          </div>
-          <p className="text-slate-600 text-sm mt-2">{form.description || 'Opportunity description will appear here.'}</p>
-          <div className="flex flex-wrap gap-2 mt-3">
-            {form.requiredSkills.map(skill => (
-              <span key={skill} className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-600 flex items-center gap-1">{skill}</span>
-            ))}
-          </div>
-          <div className="flex items-center justify-between mt-4 flex-wrap gap-2">
-            <div className="flex items-center gap-4 text-sm text-slate-500">
-              <span className="flex items-center gap-1">{form.timeCommitmentMinutes ? `${form.timeCommitmentMinutes} min` : '—'}</span>
+        <div className="flex-1 lg:sticky lg:top-8">
+          <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <h2 className="text-lg font-semibold text-slate-800 mb-4">Live preview</h2>
+            <div className="space-y-4">
+              <div className="flex justify-between items-start gap-2">
+                <h3 className="font-semibold text-lg text-slate-800">{form.title || 'Opportunity title'}</h3>
+                <span className="text-xs px-2 py-1 rounded-full bg-kindr-primary/10 text-kindr-primary whitespace-nowrap">
+                  {form.category === 'Other' ? (form.customCategory || 'Other') : (form.category || 'Uncategorized')}
+                </span>
+              </div>
+              <p className="text-slate-600 text-sm">{form.description || 'Opportunity description will appear here.'}</p>
+              <div className="flex flex-wrap gap-2">
+                {form.requiredSkills.map(skill => (
+                  <span key={skill} className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-600">{skill}</span>
+                ))}
+              </div>
+              <div className="pt-2 border-t border-slate-200 text-sm text-slate-500">
+                <span className="flex items-center gap-1">{form.timeCommitmentMinutes ? `${form.timeCommitmentMinutes} min` : '—'}</span>
+              </div>
             </div>
           </div>
         </div>

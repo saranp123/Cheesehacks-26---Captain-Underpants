@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { BADGES } from '../data/placeholders'
-import { Clock, Award, Tag } from 'lucide-react'
+import { Clock, Award, Tag, Edit2, Save, X } from 'lucide-react'
 import { getUser, normalizeUser } from '../api/client'
 
 export default function ProfilePerson() {
@@ -9,6 +9,14 @@ export default function ProfilePerson() {
   const [userData, setUserData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [isEditing, setIsEditing] = useState(false)
+  const [formData, setFormData] = useState({
+    name: '',
+    about: '',
+    pastExperiences: '',
+    skills: [],
+    resume: null,
+  })
 
   useEffect(() => {
     let cancelled = false
@@ -22,6 +30,60 @@ export default function ProfilePerson() {
     return () => { cancelled = true }
   }, [profile?.id])
 
+  useEffect(() => {
+    if (userData && !formData.name) {
+      setFormData({
+        name: userData.name || profile?.name || 'Volunteer',
+        about: userData.about || 'Passionate about making a difference in the community.',
+        pastExperiences: userData.pastExperiences || 'This is your space to share your volunteering journey and past experiences.',
+        skills: userData.skills || [],
+        resume: null,
+      })
+    }
+  }, [userData])
+
+  const handleEditStart = () => {
+    setIsEditing(true)
+  }
+
+  const handleSave = () => {
+    setUserData({
+      ...userData,
+      name: formData.name,
+      about: formData.about,
+      pastExperiences: formData.pastExperiences,
+      skills: formData.skills,
+    })
+    setIsEditing(false)
+  }
+
+  const handleCancel = () => {
+    setIsEditing(false)
+    setFormData({
+      name: userData?.name || profile?.name || 'Volunteer',
+      about: userData?.about || 'Passionate about making a difference in the community.',
+      pastExperiences: userData?.pastExperiences || 'This is your space to share your volunteering journey and past experiences.',
+      skills: userData?.skills || [],
+      resume: null,
+    })
+  }
+
+  const handleSkillToggle = (skill) => {
+    setFormData(prev => ({
+      ...prev,
+      skills: prev.skills.includes(skill)
+        ? prev.skills.filter(s => s !== skill)
+        : [...prev.skills, skill]
+    }))
+  }
+
+  const handleResumeChange = (e) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setFormData(prev => ({ ...prev, resume: file }))
+    }
+  }
+
   const src = userData || profile || {}
   const badges = (src?.badges || []).map(id => BADGES.find(b => b.id === id)).filter(Boolean)
   const skills = src?.skills || []
@@ -32,7 +94,17 @@ export default function ProfilePerson() {
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="max-w-6xl mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-slate-900 mb-8">My Profile</h1>
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold text-slate-900">My Profile</h1>
+          {!isEditing && (
+            <button
+              onClick={handleEditStart}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
+            >
+              <Edit2 size={18} /> Edit Profile
+            </button>
+          )}
+        </div>
 
         {error && (
           <div className="mb-6 p-4 rounded-2xl bg-red-50 text-red-700 border border-red-200 shadow-sm">
@@ -45,6 +117,92 @@ export default function ProfilePerson() {
             <div className="text-center">
               <div className="inline-block w-8 h-8 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
               <p className="text-slate-500">Loading profile…</p>
+            </div>
+          </div>
+        ) : isEditing ? (
+          <div className="space-y-6">
+            <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+              <h2 className="text-lg font-bold text-slate-900 mb-6">Edit Your Profile</h2>
+              
+              <div className="space-y-5">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Name</label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                    className="w-full rounded-lg border border-slate-200 px-4 py-2.5"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">About You</label>
+                  <textarea
+                    value={formData.about}
+                    onChange={(e) => setFormData(prev => ({ ...prev, about: e.target.value }))}
+                    rows={4}
+                    className="w-full rounded-lg border border-slate-200 px-4 py-2.5"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Past Experiences</label>
+                  <textarea
+                    value={formData.pastExperiences}
+                    onChange={(e) => setFormData(prev => ({ ...prev, pastExperiences: e.target.value }))}
+                    rows={4}
+                    className="w-full rounded-lg border border-slate-200 px-4 py-2.5"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-3">Skills</label>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {['Teaching', 'Writing', 'Design', 'Coding', 'Social Media', 'Events', 'Research', 'Tutoring'].map(skill => (
+                      <button
+                        key={skill}
+                        type="button"
+                        onClick={() => handleSkillToggle(skill)}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium border transition ${
+                          formData.skills.includes(skill)
+                            ? 'bg-blue-600 text-white border-blue-600'
+                            : 'bg-slate-100 text-slate-700 border-slate-200 hover:border-slate-300'
+                        }`}
+                      >
+                        {skill}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Resume (Optional)</label>
+                  <input
+                    type="file"
+                    accept=".pdf,.doc,.docx"
+                    onChange={handleResumeChange}
+                    className="w-full"
+                  />
+                  {formData.resume && (
+                    <p className="text-sm text-slate-600 mt-2">Selected: {formData.resume.name}</p>
+                  )}
+                </div>
+
+                <div className="flex gap-3 pt-4 border-t border-slate-200">
+                  <button
+                    onClick={handleSave}
+                    className="flex items-center gap-2 px-6 py-2.5 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
+                  >
+                    <Save size={18} /> Save Changes
+                  </button>
+                  <button
+                    onClick={handleCancel}
+                    className="flex items-center gap-2 px-6 py-2.5 rounded-lg border border-slate-200 text-slate-700 font-medium hover:bg-slate-50 transition"
+                  >
+                    <X size={18} /> Cancel
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         ) : (
@@ -69,6 +227,16 @@ export default function ProfilePerson() {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-6 shadow-sm">
+        <h3 className="text-lg font-bold text-slate-900 mb-3">About</h3>
+        <p className="text-slate-600 text-sm leading-relaxed">{src?.about || 'No about information added yet.'}</p>
+      </div>
+
+      <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-6 shadow-sm">
+        <h3 className="text-lg font-bold text-slate-900 mb-3">Past Experiences</h3>
+        <p className="text-slate-600 text-sm leading-relaxed">{src?.pastExperiences || 'No past experiences added yet.'}</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">

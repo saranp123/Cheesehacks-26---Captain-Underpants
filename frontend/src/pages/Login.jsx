@@ -3,9 +3,18 @@ import { useNavigate } from 'react-router-dom'
 import { Heart } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
+const validatePassword = (pwd) => {
+  const hasUppercase = /[A-Z]/.test(pwd)
+  const hasLowercase = /[a-z]/.test(pwd)
+  const hasNumber = /[0-9]/.test(pwd)
+  const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>?]/.test(pwd)
+  const isLongEnough = pwd.length >= 8
+  return hasUppercase && hasLowercase && hasNumber && hasSpecialChar && isLongEnough
+}
+
 export default function Login() {
   const [email, setEmail] = useState('demo@kindr.demo')
-  const [password, setPassword] = useState('demo123')
+  const [password, setPassword] = useState('KindrDemo@2026')
   const [isOrg, setIsOrg] = useState(false)
   const [signUp, setSignUp] = useState(false)
   const [name, setName] = useState('')
@@ -17,6 +26,10 @@ export default function Login() {
     e.preventDefault()
     setError('')
     try {
+      if (signUp && !validatePassword(password)) {
+        setError('Password must be at least 8 characters with uppercase, lowercase, number, and special character')
+        return
+      }
       if (signUp) {
         await signup(email, password, name || (isOrg ? 'Demo Org' : 'Demo User'), isOrg)
       } else {
