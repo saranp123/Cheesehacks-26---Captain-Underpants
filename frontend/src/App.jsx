@@ -6,6 +6,8 @@ import Impact from './pages/Impact'
 import ProfilePerson from './user/ProfilePerson'
 import ProfileOrg from './organization/ProfileOrg'
 import PostOpportunity from './organization/PostOpportunity'
+import VolunteerProfileView from './organization/VolunteerProfileView'
+import OpportunityDetailPage from './organization/OpportunityDetailPage'
 import MessagingPage from './pages/MessagingPage'
 import Login from './pages/Login'
 import { useAuth } from './context/AuthContext'
@@ -44,6 +46,8 @@ export default function App() {
           </ProtectedRoute>
         } />
         <Route path="messages" element={<ProtectedRoute><MessagingPage /></ProtectedRoute>} />
+        <Route path="volunteer/:id" element={<ProtectedRoute requireOrg><VolunteerProfileView /></ProtectedRoute>} />
+        <Route path="org/opportunity/:id" element={<ProtectedRoute requireOrg><OpportunityDetailPage /></ProtectedRoute>} />
       </Route>
       <Route path="*" element={<Navigate to="/feed" replace />} />
     </Routes>
