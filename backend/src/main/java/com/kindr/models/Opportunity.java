@@ -12,8 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Opportunity {
-    private Long id;
-    private Long orgId;
+    private String id;
+    private String orgId;
     private String title;
     private List<String> requiredTags;
     private List<String> requiredSkills;

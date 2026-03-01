@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MatchResult {
-    private Long userId;
-    private Long opportunityId;
+    private String userId;
+    private String opportunityId;
     private int fitScore;  // 0-100
     private String message;
 }

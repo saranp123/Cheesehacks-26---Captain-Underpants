@@ -18,8 +18,8 @@ public class MatchController {
 
     @GetMapping("/{userId}/{opportunityId}")
     public ResponseEntity<MatchResult> getMatch(
-            @PathVariable Long userId,
-            @PathVariable Long opportunityId) {
+            @PathVariable String userId,
+            @PathVariable String opportunityId) {
         MatchResult result = matchService.getFitScore(userId, opportunityId);
         return ResponseEntity.ok(result);
     }

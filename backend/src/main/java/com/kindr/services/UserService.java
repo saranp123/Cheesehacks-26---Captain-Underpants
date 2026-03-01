@@ -14,26 +14,26 @@ public class UserService {
 
     public UserService() {
         users.add(User.builder()
-                .id(1L)
+                .id("v_10485")
                 .name("Alex Chen")
                 .alignmentTags(List.of("environment", "education", "animal-welfare"))
                 .skills(List.of("teaching", "writing", "social-media"))
                 .build());
         users.add(User.builder()
-                .id(2L)
+                .id("v_10486")
                 .name("Sam Rivera")
                 .alignmentTags(List.of("health", "community", "education"))
                 .skills(List.of("data-entry", "translation", "tutoring"))
                 .build());
         users.add(User.builder()
-                .id(3L)
+                .id("v_10487")
                 .name("Jordan Lee")
                 .alignmentTags(List.of("environment", "sustainability", "climate"))
                 .skills(List.of("research", "writing", "outreach"))
                 .build());
     }
 
-    public Optional<User> findById(Long id) {
+    public Optional<User> findById(String id) {
         return users.stream().filter(u -> u.getId().equals(id)).findFirst();
     }
 }

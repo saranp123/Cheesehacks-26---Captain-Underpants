@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Organization {
-    private Long id;
+    private String id;
     private String name;
     private List<String> focusAreas;
 }

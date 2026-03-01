@@ -17,7 +17,7 @@ public class OrganizationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Organization> getOrganization(@PathVariable Long id) {
+    public ResponseEntity<Organization> getOrganization(@PathVariable String id) {
         return organizationService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

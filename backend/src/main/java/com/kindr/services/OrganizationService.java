@@ -14,23 +14,23 @@ public class OrganizationService {
 
     public OrganizationService() {
         organizations.add(Organization.builder()
-                .id(1L)
+                .id("org_001")
                 .name("Green Earth Initiative")
                 .focusAreas(List.of("environment", "sustainability", "climate"))
                 .build());
         organizations.add(Organization.builder()
-                .id(2L)
+                .id("org_002")
                 .name("Community Learning Hub")
                 .focusAreas(List.of("education", "community", "youth"))
                 .build());
         organizations.add(Organization.builder()
-                .id(3L)
+                .id("org_003")
                 .name("Paws & Claws Rescue")
                 .focusAreas(List.of("animal-welfare", "rescue", "community"))
                 .build());
     }
 
-    public Optional<Organization> findById(Long id) {
+    public Optional<Organization> findById(String id) {
         return organizations.stream().filter(o -> o.getId().equals(id)).findFirst();
     }
 }

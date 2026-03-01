@@ -25,7 +25,7 @@ public class MatchService {
      * against the opportunity's requiredTags/requiredSkills.
      * 50% weight on tag overlap, 50% on skill overlap.
      */
-    public MatchResult getFitScore(Long userId, Long opportunityId) {
+    public MatchResult getFitScore(String userId, String opportunityId) {
         User user = userService.findById(userId).orElse(null);
         Opportunity opportunity = opportunityService.findById(opportunityId).orElse(null);
 
