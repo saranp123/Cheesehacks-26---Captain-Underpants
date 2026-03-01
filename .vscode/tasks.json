@@ -1,0 +1,16 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run KINDR Backend",
+      "type": "shell",
+      "command": "mvn spring-boot:run",
+      "options": {
+        "cwd": "${workspaceFolder}/backend",
+        "env": {}
+      },
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "new" }
+    }
+  ]
+}

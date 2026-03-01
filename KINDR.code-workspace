@@ -1,0 +1,9 @@
+{
+  "folders": [
+    { "path": ".", "name": "repo" },
+    { "path": "backend", "name": "backend (KINDR)" }
+  ],
+  "settings": {
+    "java.configuration.updateBuildConfiguration": "automatic"
+  }
+}
