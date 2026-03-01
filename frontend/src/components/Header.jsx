@@ -48,7 +48,7 @@ export default function Header() {
                 <Link to="/impact" className="text-slate-600 hover:text-kindr-primary flex items-center gap-1">
                   <BarChart3 size={18} /> Impact
                 </Link>
-                <Link to="/profile" className="text-slate-600 hover:text-kindr-primary flex items-center gap-1">
+                <Link to="/profile/full" className="text-slate-600 hover:text-kindr-primary flex items-center gap-1">
                   <User size={18} /> Profile
                 </Link>
                 <Link to="/messages" className="text-slate-600 hover:text-kindr-primary flex items-center gap-1">

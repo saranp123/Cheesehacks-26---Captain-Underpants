@@ -12,6 +12,7 @@ import OrganizationProfilePage from './organization/OrganizationProfilePage'
 import UserOpportunityDetailPage from './user/UserOpportunityDetailPage'
 import MessagingPage from './pages/MessagingPage'
 import OrgMessagesPage from './organization/OrgMessagesPage'
+import UserProfilePage from './user/UserProfilePage'
 import Login from './pages/Login'
 import { useAuth } from './context/AuthContext'
 
@@ -42,6 +43,7 @@ export default function App() {
         } />
         <Route path="impact" element={<ProtectedRoute><Impact /></ProtectedRoute>} />
         <Route path="profile" element={<ProtectedRoute requireOrg={false}><ProfilePerson /></ProtectedRoute>} />
+        <Route path="profile/full" element={<ProtectedRoute requireOrg={false}><UserProfilePage /></ProtectedRoute>} />
         <Route path="org/profile" element={<ProtectedRoute requireOrg><ProfileOrg /></ProtectedRoute>} />
         <Route path="post" element={
           <ProtectedRoute requireOrg>
