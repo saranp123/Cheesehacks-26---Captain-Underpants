@@ -2,6 +2,8 @@
 
 Spring Boot API for the KINDR micro-volunteering app. Uses in-memory mock data (no database).
 
+**If the IDE says "non-project file"**: open **File → Open Workspace from File…** and choose `KINDR.code-workspace` in the repo root so the backend is loaded as a Maven project.
+
 ## Run
 
 From the repo root:
